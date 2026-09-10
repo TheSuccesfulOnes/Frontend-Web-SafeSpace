@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,300..700,0..1,-50..200&display=swap");
+
+:root {
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  color: #16211f;
+  background: #f5f6f1;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --ink: #16211f;
+  --muted: #73807b;
+  --paper: #f5f6f1;
+  --panel: #ffffff;
+  --panel-soft: #eef1ec;
+  --line: #e1e5de;
+  --line-strong: #cad3cb;
+  --dark: #243432;
+  --dark-soft: #30423f;
+  --coral: #ee8e79;
+  --blue: #b9d8e5;
+  --sage: #a7c4a5;
+  --lilac: #e2d0fa;
+  --gold: #e9c36c;
+  --danger: #b64f43;
+}
+
+:root[data-theme="dark"] {
+  color: #e6ece8;
+  background: #18211f;
+  --ink: #e6ece8;
+  --muted: #a7b5ae;
+  --paper: #18211f;
+  --panel: #202b28;
+  --panel-soft: #273632;
+  --line: #354640;
+  --line-strong: #52645c;
+  --dark: #0f1715;
+  --dark-soft: #33483c;
+  --coral: #ffb09d;
+  --blue: #a4cde0;
+  --sage: #a7d0b0;
+  --lilac: #b99cdc;
+  --gold: #f5d98d;
+  --danger: #ff9c8f;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+}
+body {
+  min-height: 100vh;
+  background: var(--paper);
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--coral);
+  outline-offset: 2px;
+}
+a {
+  color: inherit;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: var(--muted);
+  font:
+    500 10px "DM Mono",
+    monospace;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.muted,
+.form-intro {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+  vertical-align: -3px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
