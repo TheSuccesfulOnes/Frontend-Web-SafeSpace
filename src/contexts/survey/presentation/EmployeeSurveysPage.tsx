@@ -764,18 +764,40 @@ function ActivityCard({
   const [selected, setSelected] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
   const [voted, setVoted] = useState(false);
+  const [votedOptionId, setVotedOptionId] = useState<number | null>(null);
+  const [options, setOptions] = useState(activity.options);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  useEffect(() => {
+    setOptions(activity.options);
+  }, [activity.options]);
+
   const total = useMemo(
-    () => activity.options.reduce((sum, option) => sum + option.votes, 0),
-    [activity.options],
+    () => options.reduce((sum, option) => sum + option.votes, 0),
+    [options],
   );
+
   async function vote() {
-    if (!selected) return;
+    if (selected === null) return;
     setPending(true);
     setError("");
     try {
       await voteActivity(token, activity.id, selected);
+      setVotedOptionId(selected);
       setVoted(true);
+      setMessage(t("voteRecorded"));
+
+      // Refresh the activity so percentages and totals reflect the persisted vote.
+      try {
+        const latestActivities = await getActivities(token);
+        const latestActivity = latestActivities.find(
+          (item) => item.id === activity.id,
+        );
+        if (latestActivity) setOptions(latestActivity.options);
+      } catch (refreshError) {
+        if (isUnauthorized(refreshError)) onUnauthorized();
+        else setError(t("errorGeneric"));
+      }
     } catch (errorValue) {
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
@@ -794,9 +816,9 @@ function ActivityCard({
       <h3>{activity.title}</h3>
       <p className="card-question">{activity.description}</p>
       <div className="activity-options">
-        {activity.options.map((option) => (
+        {options.map((option) => (
           <label
-            className={`activity-option ${selected === option.id ? "selected" : ""}`}
+            className={`activity-option ${selected === option.id ? "selected" : ""} ${votedOptionId === option.id ? "voted" : ""}`}
             key={option.id}
           >
             <input
@@ -806,13 +828,23 @@ function ActivityCard({
               checked={selected === option.id}
               onChange={() => setSelected(option.id)}
             />
-            <span>
+            <span className="activity-option-copy">
               <strong>{option.label}</strong>
               <small>
                 {option.percentage}% · {option.votes} {t("votes")}
               </small>
+              {votedOptionId === option.id && selected === option.id && (
+                <small className="activity-option-voted">
+                  <span aria-hidden="true">✓</span> {t("voted")}
+                </small>
+              )}
             </span>
-            <i style={{ width: `${Math.max(option.percentage, 4)}%` }} />
+            <i
+              aria-hidden="true"
+              style={{
+                width: `${Math.min(100, Math.max(option.percentage, 4))}%`,
+              }}
+            />
           </label>
         ))}
       </div>
@@ -824,19 +856,20 @@ function ActivityCard({
           type="button"
           className="primary-button compact-button"
           onClick={() => void vote()}
-          disabled={activity.status !== "OPEN" || pending || !selected}
+          disabled={activity.status !== "OPEN" || pending || selected === null}
         >
           {pending ? (
             <Spinner />
           ) : activity.status !== "OPEN" ? (
             t("closed")
-          ) : voted ? (
+          ) : voted && selected === votedOptionId ? (
             t("voted")
           ) : (
             t("vote")
           )}
         </button>
       </div>
+      <SuccessMessage message={message} onDismiss={() => setMessage("")} />
       {error && <ErrorNotice message={error} />}
     </article>
   );
