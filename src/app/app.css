@@ -850,6 +850,8 @@ input::placeholder {
 .comment-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
   gap: 7px;
 }
 .comment-action {
@@ -857,8 +859,9 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  min-height: 30px;
-  padding: 5px 9px;
+  width: auto;
+  min-height: 34px;
+  padding: 7px 11px;
   border: 1px solid var(--line-strong);
   color: var(--muted);
   background: var(--panel);
@@ -871,15 +874,31 @@ input::placeholder {
 }
 .comment-action:hover:not(:disabled),
 .comment-action.is-liked {
-  border-color: var(--dark);
-  color: var(--dark);
+  border-color: var(--line-strong);
+  color: var(--ink);
   background: var(--panel-soft);
 }
 .comment-action.is-liked {
+  border-color: var(--coral);
   color: var(--coral);
+}
+.comment-like-action {
+  border-color: color-mix(in srgb, var(--lilac) 70%, var(--line-strong));
+  background: color-mix(in srgb, var(--lilac) 28%, var(--panel));
+}
+.comment-like-action:hover:not(:disabled) {
+  border-color: var(--lilac);
+}
+.comment-reply-action {
+  border-color: color-mix(in srgb, var(--blue) 72%, var(--line-strong));
+  background: color-mix(in srgb, var(--blue) 24%, var(--panel));
+}
+.comment-reply-action:hover:not(:disabled) {
+  border-color: var(--blue);
 }
 .comment-delete-action {
   color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, var(--panel));
 }
 .comment-delete-action:hover:not(:disabled) {
   border-color: var(--danger);
@@ -893,12 +912,12 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  width: max-content;
-  min-height: 30px;
-  padding: 5px 8px;
-  border: 1px solid var(--line-strong);
+  width: auto;
+  min-height: 34px;
+  padding: 7px 11px;
+  border: 1px solid color-mix(in srgb, var(--sage) 74%, var(--line-strong));
   color: var(--muted);
-  background: var(--panel);
+  background: color-mix(in srgb, var(--sage) 25%, var(--panel));
   font-size: 10px;
   font-weight: 700;
   transition:
@@ -907,9 +926,9 @@ input::placeholder {
     background 160ms ease;
 }
 .comment-replies-toggle:hover:not(:disabled) {
-  border-color: var(--dark);
-  color: var(--dark);
-  background: var(--panel-soft);
+  border-color: var(--sage);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--sage) 38%, var(--panel));
 }
 .comment-replies-toggle .material-symbols-rounded {
   font-size: 16px;

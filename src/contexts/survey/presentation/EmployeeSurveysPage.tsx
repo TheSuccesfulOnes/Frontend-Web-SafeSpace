@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   Activity,
   Comment,
@@ -274,6 +274,7 @@ function SurveyCard({
   const [answer, setAnswer] = useState("");
   const [submitted, setSubmitted] = useState(survey.answered);
   const [comments, setComments] = useState<Comment[]>([]);
+  const [commentsCount, setCommentsCount] = useState<number | null>(null);
   const [likedComments, setLikedComments] = useState<number[]>([]);
   const [showComments, setShowComments] = useState(false);
   const [commentsLoading, setCommentsLoading] = useState(false);
@@ -282,15 +283,58 @@ function SurveyCard({
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const commentsRequestRef = useRef<Promise<Comment[]> | null>(null);
 
   useEffect(() => {
     setSubmitted(survey.answered);
   }, [survey.answered]);
 
+  const requestComments = useCallback(() => {
+    const existingRequest = commentsRequestRef.current;
+    if (existingRequest) return existingRequest;
+
+    const request = getComments(token, survey.id);
+    const trackedRequest = request.finally(() => {
+      if (commentsRequestRef.current === trackedRequest) {
+        commentsRequestRef.current = null;
+      }
+    });
+    commentsRequestRef.current = trackedRequest;
+    return trackedRequest;
+  }, [survey.id, token]);
+
+  useEffect(() => {
+    if (!survey.allowComments) return;
+    let active = true;
+    setCommentsLoading(true);
+
+    void requestComments()
+      .then((nextComments) => {
+        if (!active) return;
+        setComments(nextComments);
+        setCommentsCount(nextComments.length);
+        setCommentsLoaded(true);
+      })
+      .catch((errorValue: unknown) => {
+        if (!active) return;
+        if (isUnauthorized(errorValue)) onUnauthorized();
+        else setError(t("errorGeneric"));
+      })
+      .finally(() => {
+        if (active) setCommentsLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [onUnauthorized, requestComments, survey.allowComments, t]);
+
   async function refreshComments(showLoading = false): Promise<boolean> {
     if (showLoading) setCommentsLoading(true);
     try {
-      setComments(await getComments(token, survey.id));
+      const nextComments = await requestComments();
+      setComments(nextComments);
+      setCommentsCount(nextComments.length);
       setCommentsLoaded(true);
       return true;
     } catch (errorValue) {
@@ -430,7 +474,7 @@ function SurveyCard({
           >
             <span>
               {showComments ? t("hideComments") : t("showComments")} (
-              {comments.length})
+              {commentsCount === null ? "…" : commentsCount})
             </span>
             <span aria-hidden="true">{showComments ? "⌃" : "⌄"}</span>
           </button>
@@ -522,7 +566,7 @@ function CommentThread({
           {depth === 0 && (
             <button
               type="button"
-              className={`comment-action ${likedComments.includes(comment.id) ? "is-liked" : ""}`}
+              className={`comment-action comment-like-action ${likedComments.includes(comment.id) ? "is-liked" : ""}`}
               onClick={() => void onLike(comment.id)}
               disabled={isPending}
             >
@@ -535,12 +579,28 @@ function CommentThread({
           {depth === 0 && (
             <button
               type="button"
-              className="comment-action"
+              className="comment-action comment-reply-action"
               onClick={() => setReplying((current) => !current)}
               disabled={isPending}
               aria-expanded={replying}
             >
               {replying ? t("closeReply") : t("reply")}
+            </button>
+          )}
+          {depth === 0 && comment.replies.length > 0 && (
+            <button
+              type="button"
+              className="comment-replies-toggle"
+              onClick={() => setRepliesExpanded((current) => !current)}
+              disabled={isPending}
+              aria-expanded={repliesExpanded}
+            >
+              <span className="material-symbols-rounded" aria-hidden="true">
+                {repliesExpanded ? "expand_less" : "expand_more"}
+              </span>
+              {repliesExpanded
+                ? t("closeReplies")
+                : replyCountLabel(comment.replies.length)}
             </button>
           )}
           {comment.canDelete && (
@@ -558,22 +618,6 @@ function CommentThread({
             </button>
           )}
         </div>
-        {depth === 0 && comment.replies.length > 0 && (
-          <button
-            type="button"
-            className="comment-replies-toggle"
-            onClick={() => setRepliesExpanded((current) => !current)}
-            disabled={isPending}
-            aria-expanded={repliesExpanded}
-          >
-            <span className="material-symbols-rounded" aria-hidden="true">
-              {repliesExpanded ? "expand_less" : "expand_more"}
-            </span>
-            {repliesExpanded
-              ? t("closeReplies")
-              : replyCountLabel(comment.replies.length)}
-          </button>
-        )}
       </article>
       {depth === 0 && replying && (
         <form className="comment-reply-form" onSubmit={submitReply}>
