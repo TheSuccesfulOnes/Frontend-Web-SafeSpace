@@ -117,7 +117,7 @@ export function EmployeeSurveysPage({
   }, [onUnauthorized, tab, t, token]);
 
   async function refreshCurrentTab() {
-    if (loading || refreshing) return;
+    if (loading || refreshing || reportsLoading) return;
     setRefreshing(true);
     setError("");
     try {
@@ -182,11 +182,15 @@ export function EmployeeSurveysPage({
           type="button"
           className="secondary-button refresh-button survey-refresh-button"
           onClick={() => void refreshCurrentTab()}
-          disabled={loading || refreshing}
-          aria-busy={refreshing}
+          disabled={loading || refreshing || reportsLoading}
+          aria-busy={refreshing || reportsLoading}
           aria-label={t("refresh")}
         >
-          {refreshing ? <Spinner /> : <span aria-hidden="true">↻</span>}
+          {refreshing || reportsLoading ? (
+            <Spinner />
+          ) : (
+            <span aria-hidden="true">↻</span>
+          )}
           {t("refresh")}
         </button>
       </div>
