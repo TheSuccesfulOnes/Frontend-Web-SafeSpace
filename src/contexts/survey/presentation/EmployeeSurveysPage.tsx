@@ -806,72 +806,84 @@ function ActivityCard({
     }
   }
   return (
-    <article className="content-card activity-card">
-      <div className="card-meta">
-        <span className="status-tag status-open">{t("weeklyActivities")}</span>
-        <span>
-          {activity.status === "OPEN" ? t("activityOpen") : t("activityClosed")}
-        </span>
-      </div>
-      <h3>{activity.title}</h3>
-      <p className="card-question">{activity.description}</p>
-      <div className="activity-options">
-        {options.map((option) => (
-          <label
-            className={`activity-option ${selected === option.id ? "selected" : ""} ${votedOptionId === option.id ? "voted" : ""}`}
-            key={option.id}
-          >
-            <input
-              type="radio"
-              name={`activity-${activity.id}`}
-              value={option.id}
-              checked={selected === option.id}
-              onChange={() => setSelected(option.id)}
-            />
-            <span className="activity-option-copy">
-              <strong>{option.label}</strong>
-              <small>
-                {option.percentage}% · {option.votes} {t("votes")}
-              </small>
-              {votedOptionId === option.id && selected === option.id && (
-                <small className="activity-option-voted">
-                  <span aria-hidden="true">✓</span> {t("voted")}
+    <>
+      {message && (
+        <div className="activity-vote-message">
+          <SuccessMessage message={message} onDismiss={() => setMessage("")} />
+        </div>
+      )}
+      <article className="content-card activity-card">
+        <div className="card-meta">
+          <span className="status-tag status-open">
+            {t("weeklyActivities")}
+          </span>
+          <span>
+            {activity.status === "OPEN"
+              ? t("activityOpen")
+              : t("activityClosed")}
+          </span>
+        </div>
+        <h3>{activity.title}</h3>
+        <p className="card-question">{activity.description}</p>
+        <div className="activity-options">
+          {options.map((option) => (
+            <label
+              className={`activity-option ${selected === option.id ? "selected" : ""} ${votedOptionId === option.id ? "voted" : ""}`}
+              key={option.id}
+            >
+              <input
+                type="radio"
+                name={`activity-${activity.id}`}
+                value={option.id}
+                checked={selected === option.id}
+                onChange={() => setSelected(option.id)}
+              />
+              <span className="activity-option-copy">
+                <strong>{option.label}</strong>
+                <small>
+                  {option.percentage}% · {option.votes} {t("votes")}
                 </small>
-              )}
-            </span>
-            <i
-              aria-hidden="true"
-              style={{
-                width: `${Math.min(100, Math.max(option.percentage, 4))}%`,
-              }}
-            />
-          </label>
-        ))}
-      </div>
-      <div className="card-footer-actions">
-        <span>
-          {total} {t("votes")}
-        </span>
-        <button
-          type="button"
-          className="primary-button compact-button"
-          onClick={() => void vote()}
-          disabled={activity.status !== "OPEN" || pending || selected === null}
-        >
-          {pending ? (
-            <Spinner />
-          ) : activity.status !== "OPEN" ? (
-            t("closed")
-          ) : voted && selected === votedOptionId ? (
-            t("voted")
-          ) : (
-            t("vote")
-          )}
-        </button>
-      </div>
-      <SuccessMessage message={message} onDismiss={() => setMessage("")} />
-      {error && <ErrorNotice message={error} />}
-    </article>
+                {votedOptionId === option.id && selected === option.id && (
+                  <small className="activity-option-voted">
+                    <span aria-hidden="true">✓</span> {t("voted")}
+                  </small>
+                )}
+              </span>
+              <i
+                aria-hidden="true"
+                style={{
+                  width: `${Math.min(100, Math.max(option.percentage, 4))}%`,
+                }}
+              />
+            </label>
+          ))}
+        </div>
+        <div className="card-footer-actions">
+          <span>
+            {total} {t("votes")}
+          </span>
+          <button
+            type="button"
+            className="primary-button compact-button"
+            onClick={() => void vote()}
+            disabled={
+              activity.status !== "OPEN" || pending || selected === null
+            }
+          >
+            {pending ? (
+              <Spinner />
+            ) : activity.status !== "OPEN" ? (
+              t("closed")
+            ) : voted && selected === votedOptionId ? (
+              t("voted")
+            ) : (
+              t("vote")
+            )}
+          </button>
+        </div>
+        {error && <ErrorNotice message={error} />}
+      </article>
+    </>
   );
 }
 

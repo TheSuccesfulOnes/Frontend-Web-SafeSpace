@@ -817,8 +817,8 @@
     monospace;
   letter-spacing: 0.03em;
 }
-.activity-card .success-message {
-  margin: 14px 0 0;
+.activity-vote-message .success-message {
+  margin: 0;
 }
 .content-card h3 {
   margin: 13px 0 7px;
