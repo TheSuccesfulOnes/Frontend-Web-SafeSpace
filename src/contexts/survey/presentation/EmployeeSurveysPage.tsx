@@ -10,6 +10,7 @@ import {
   addComment,
   answerSurvey,
   createReport,
+  deleteComment,
   getActivities,
   getComments,
   getMyReports,
@@ -47,6 +48,7 @@ export function EmployeeSurveysPage({
   >([]);
   const [reportsLoading, setReportsLoading] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -114,6 +116,29 @@ export function EmployeeSurveysPage({
     };
   }, [onUnauthorized, tab, t, token]);
 
+  async function refreshCurrentTab() {
+    if (loading || refreshing) return;
+    setRefreshing(true);
+    setError("");
+    try {
+      if (tab === "reports") {
+        setReports(await getMyReports(token));
+      } else {
+        const [nextSurveys, nextActivities] = await Promise.all([
+          getSurveys(token),
+          getActivities(token),
+        ]);
+        setSurveys(nextSurveys);
+        setActivities(nextActivities);
+      }
+    } catch (errorValue) {
+      if (isUnauthorized(errorValue)) onUnauthorized();
+      else setError(t("errorGeneric"));
+    } finally {
+      setRefreshing(false);
+    }
+  }
+
   return (
     <section className="content-stack">
       <div className="page-intro">
@@ -123,33 +148,46 @@ export function EmployeeSurveysPage({
           <p>{t("surveyCenterIntro")}</p>
         </div>
       </div>
-      <div className="tab-switcher" role="tablist" aria-label={t("surveys")}>
+      <div className="survey-tabs-toolbar">
+        <div className="tab-switcher" role="tablist" aria-label={t("surveys")}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "daily"}
+            className={tab === "daily" ? "selected" : ""}
+            onClick={() => setTab("daily")}
+          >
+            {t("surveys")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "weekly"}
+            className={tab === "weekly" ? "selected" : ""}
+            onClick={() => setTab("weekly")}
+          >
+            {t("weeklyActivities")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={tab === "reports"}
+            className={tab === "reports" ? "selected" : ""}
+            onClick={() => setTab("reports")}
+          >
+            {t("reports")}
+          </button>
+        </div>
         <button
           type="button"
-          role="tab"
-          aria-selected={tab === "daily"}
-          className={tab === "daily" ? "selected" : ""}
-          onClick={() => setTab("daily")}
+          className="secondary-button refresh-button survey-refresh-button"
+          onClick={() => void refreshCurrentTab()}
+          disabled={loading || refreshing}
+          aria-busy={refreshing}
+          aria-label={t("refresh")}
         >
-          {t("surveys")}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "weekly"}
-          className={tab === "weekly" ? "selected" : ""}
-          onClick={() => setTab("weekly")}
-        >
-          {t("weeklyActivities")}
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === "reports"}
-          className={tab === "reports" ? "selected" : ""}
-          onClick={() => setTab("reports")}
-        >
-          {t("reports")}
+          {refreshing ? <Spinner /> : <span aria-hidden="true">↻</span>}
+          {t("refresh")}
         </button>
       </div>
       {error && <ErrorNotice message={error} />}
@@ -233,12 +271,32 @@ function SurveyCard({
   const [submitted, setSubmitted] = useState(survey.answered);
   const [comments, setComments] = useState<Comment[]>([]);
   const [likedComments, setLikedComments] = useState<number[]>([]);
-  const [comment, setComment] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [commentsLoaded, setCommentsLoaded] = useState(false);
+  const [commentsPending, setCommentsPending] = useState(false);
   const [pending, setPending] = useState(false);
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setSubmitted(survey.answered);
+  }, [survey.answered]);
+
+  async function refreshComments(showLoading = false): Promise<boolean> {
+    if (showLoading) setCommentsLoading(true);
+    try {
+      setComments(await getComments(token, survey.id));
+      setCommentsLoaded(true);
+      return true;
+    } catch (errorValue) {
+      if (isUnauthorized(errorValue)) onUnauthorized();
+      else setError(t("errorGeneric"));
+      return false;
+    } finally {
+      if (showLoading) setCommentsLoading(false);
+    }
+  }
 
   async function submit() {
     if (!answer.trim()) return;
@@ -247,6 +305,9 @@ function SurveyCard({
     try {
       await answerSurvey(token, survey.id, answer);
       setSubmitted(true);
+      setAnswer("");
+      // Survey answers are also anonymous root comments in the backend.
+      if (survey.allowComments) await refreshComments();
     } catch (errorValue) {
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
@@ -264,31 +325,30 @@ function SurveyCard({
     setShowComments(true);
     if (commentsLoaded) return;
 
-    setCommentsLoading(true);
-    try {
-      setComments(await getComments(token, survey.id));
-      setCommentsLoaded(true);
-    } catch (errorValue) {
-      if (isUnauthorized(errorValue)) onUnauthorized();
-      else setError(t("errorGeneric"));
-    } finally {
-      setCommentsLoading(false);
-    }
+    await refreshComments(true);
   }
 
-  async function publishComment() {
-    if (!comment.trim()) return;
+  async function publishReply(content: string, parentId: number) {
+    if (!content.trim()) return false;
+    setCommentsPending(true);
+    setError("");
     try {
-      const created = await addComment(token, survey.id, comment);
-      setComments((current) => [...current, created]);
-      setComment("");
+      await addComment(token, survey.id, content, parentId);
+      const refreshed = await refreshComments();
+      if (refreshed) setMessage(t("commentPublished"));
+      return refreshed;
     } catch (errorValue) {
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
+      return false;
+    } finally {
+      setCommentsPending(false);
     }
   }
 
   async function toggleLike(commentId: number) {
+    setCommentsPending(true);
+    setError("");
     try {
       const wasLiked = likedComments.includes(commentId);
       await likeComment(token, survey.id, commentId);
@@ -297,16 +357,29 @@ function SurveyCard({
           ? current.filter((id) => id !== commentId)
           : [...current, commentId],
       );
-      setComments((current) =>
-        current.map((item) =>
-          item.id === commentId
-            ? { ...item, likes: Math.max(0, item.likes + (wasLiked ? -1 : 1)) }
-            : item,
-        ),
-      );
+      await refreshComments();
     } catch (errorValue) {
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
+    } finally {
+      setCommentsPending(false);
+    }
+  }
+
+  async function removeComment(commentId: number) {
+    setCommentsPending(true);
+    setError("");
+    try {
+      await deleteComment(token, survey.id, commentId);
+      const refreshed = await refreshComments();
+      if (refreshed) setMessage(t("commentDeleted"));
+      return refreshed;
+    } catch (errorValue) {
+      if (isUnauthorized(errorValue)) onUnauthorized();
+      else setError(t("errorGeneric"));
+      return false;
+    } finally {
+      setCommentsPending(false);
     }
   }
 
@@ -340,6 +413,7 @@ function SurveyCard({
         </div>
       )}
       {submitted && <p className="success-line">✓ {t("answered")}</p>}
+      <SuccessMessage message={message} onDismiss={() => setMessage("")} />
       {survey.allowComments && (
         <div className="comments-area">
           <button
@@ -368,35 +442,17 @@ function SurveyCard({
                       <p className="comments-empty">{t("noComments")}</p>
                     ) : (
                       comments.map((item) => (
-                        <div className="comment-item" key={item.id}>
-                          <p>{item.content}</p>
-                          <button
-                            type="button"
-                            className="comment-like"
-                            onClick={() => void toggleLike(item.id)}
-                          >
-                            {likedComments.includes(item.id) ? "♥" : "♡"}{" "}
-                            {item.likes}
-                          </button>
-                        </div>
+                        <CommentThread
+                          key={item.id}
+                          comment={item}
+                          isPending={commentsPending}
+                          likedComments={likedComments}
+                          onDelete={removeComment}
+                          onLike={toggleLike}
+                          onReply={publishReply}
+                        />
                       ))
                     )}
-                  </div>
-                  <div className="comment-composer">
-                    <input
-                      value={comment}
-                      onChange={(event) => setComment(event.target.value)}
-                      placeholder={t("addComment")}
-                      maxLength={500}
-                    />
-                    <button
-                      type="button"
-                      className="icon-button"
-                      onClick={() => void publishComment()}
-                      aria-label={t("send")}
-                    >
-                      →
-                    </button>
                   </div>
                 </>
               )}
@@ -406,6 +462,209 @@ function SurveyCard({
       )}
       {error && <ErrorNotice message={error} />}
     </article>
+  );
+}
+
+function CommentThread({
+  comment,
+  isPending,
+  likedComments,
+  onDelete,
+  onLike,
+  onReply,
+  depth = 0,
+}: {
+  comment: Comment;
+  isPending: boolean;
+  likedComments: number[];
+  onDelete: (commentId: number) => Promise<boolean>;
+  onLike: (commentId: number) => Promise<void>;
+  onReply: (content: string, parentId: number) => Promise<boolean>;
+  depth?: number;
+}) {
+  const { t } = useLanguage();
+  const [replyText, setReplyText] = useState("");
+  const [replying, setReplying] = useState(false);
+  const [repliesExpanded, setRepliesExpanded] = useState(false);
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+
+  const replyCountLabel = (count: number) =>
+    (count === 1 ? t("viewReply") : t("viewReplies")).replace(
+      "{count}",
+      String(count),
+    );
+
+  async function submitReply(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const posted = await onReply(replyText, comment.id);
+    if (posted) {
+      setReplyText("");
+      setReplying(false);
+    }
+  }
+
+  async function confirmDelete() {
+    const deleted = await onDelete(comment.id);
+    if (deleted) setDeleteConfirmationOpen(false);
+  }
+
+  return (
+    <div className="comment-thread">
+      <article className={`comment-item ${depth > 0 ? "comment-reply" : ""}`}>
+        {depth > 0 && <span className="comment-kind">{t("replyLabel")}</span>}
+        <p>{comment.content}</p>
+        <div className="comment-actions">
+          {depth === 0 && (
+            <button
+              type="button"
+              className={`comment-action ${likedComments.includes(comment.id) ? "is-liked" : ""}`}
+              onClick={() => void onLike(comment.id)}
+              disabled={isPending}
+            >
+              <span aria-hidden="true">
+                {likedComments.includes(comment.id) ? "♥" : "♡"}
+              </span>
+              <span>{comment.likes}</span>
+            </button>
+          )}
+          {depth === 0 && (
+            <button
+              type="button"
+              className="comment-action"
+              onClick={() => setReplying((current) => !current)}
+              disabled={isPending}
+              aria-expanded={replying}
+            >
+              {replying ? t("closeReply") : t("reply")}
+            </button>
+          )}
+          {comment.canDelete && (
+            <button
+              type="button"
+              className="comment-action comment-delete-action"
+              onClick={() => setDeleteConfirmationOpen(true)}
+              disabled={isPending}
+              aria-label={t("deleteComment")}
+            >
+              <span className="material-symbols-rounded" aria-hidden="true">
+                delete
+              </span>
+              <span>{t("delete")}</span>
+            </button>
+          )}
+        </div>
+        {depth === 0 && comment.replies.length > 0 && (
+          <button
+            type="button"
+            className="comment-replies-toggle"
+            onClick={() => setRepliesExpanded((current) => !current)}
+            disabled={isPending}
+            aria-expanded={repliesExpanded}
+          >
+            <span className="material-symbols-rounded" aria-hidden="true">
+              {repliesExpanded ? "expand_less" : "expand_more"}
+            </span>
+            {repliesExpanded
+              ? t("closeReplies")
+              : replyCountLabel(comment.replies.length)}
+          </button>
+        )}
+      </article>
+      {depth === 0 && replying && (
+        <form className="comment-reply-form" onSubmit={submitReply}>
+          <label>
+            <span className="sr-only">{t("replyLabel")}</span>
+            <input
+              value={replyText}
+              onChange={(event) => setReplyText(event.target.value)}
+              placeholder={t("replyPlaceholder")}
+              maxLength={1000}
+              disabled={isPending}
+            />
+          </label>
+          <button
+            type="submit"
+            className="primary-button compact-button"
+            disabled={isPending || !replyText.trim()}
+          >
+            {isPending ? <Spinner /> : t("publishReply")}
+          </button>
+        </form>
+      )}
+      {depth === 0 && repliesExpanded && comment.replies.length > 0 && (
+        <div
+          className="comment-replies"
+          aria-label={t("viewReplies").replace(
+            "{count}",
+            String(comment.replies.length),
+          )}
+        >
+          {comment.replies.map((reply) => (
+            <CommentThread
+              key={reply.id}
+              comment={reply}
+              depth={1}
+              isPending={isPending}
+              likedComments={likedComments}
+              onDelete={onDelete}
+              onLike={onLike}
+              onReply={onReply}
+            />
+          ))}
+        </div>
+      )}
+      {deleteConfirmationOpen && (
+        <CommentDeleteDialog
+          isPending={isPending}
+          onCancel={() => setDeleteConfirmationOpen(false)}
+          onConfirm={() => void confirmDelete()}
+        />
+      )}
+    </div>
+  );
+}
+
+function CommentDeleteDialog({
+  isPending,
+  onCancel,
+  onConfirm,
+}: {
+  isPending: boolean;
+  onCancel: () => void;
+  onConfirm: () => void;
+}) {
+  const { t } = useLanguage();
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <div
+        className="modal-card comment-delete-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="comment-delete-title"
+      >
+        <span className="eyebrow">{t("comments")}</span>
+        <h2 id="comment-delete-title">{t("deleteComment")}</h2>
+        <p className="form-intro">{t("deleteCommentText")}</p>
+        <div className="modal-actions">
+          <button
+            type="button"
+            className="secondary-button"
+            onClick={onCancel}
+            disabled={isPending}
+          >
+            {t("cancel")}
+          </button>
+          <button
+            type="button"
+            className="primary-button danger-button"
+            onClick={onConfirm}
+            disabled={isPending}
+          >
+            {isPending ? <Spinner /> : t("delete")}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
