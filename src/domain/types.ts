@@ -54,6 +54,7 @@ export type Comment = {
   id: number;
   content: string;
   likes: number;
+  canDelete: boolean;
   createdAt: string;
   replies: Comment[];
 };

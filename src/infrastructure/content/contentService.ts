@@ -12,9 +12,10 @@ import type {
 import { apiRequest } from "../api/apiClient";
 
 type ApiSurvey = Omit<Survey, "allowComments"> & { allow_comments: boolean };
-type ApiComment = Omit<Comment, "createdAt" | "replies"> & {
+type ApiComment = Omit<Comment, "canDelete" | "createdAt" | "replies"> & {
   created_at: string;
-  replies: ApiComment[];
+  can_delete: boolean;
+  replies?: ApiComment[];
 };
 type ApiMoodSummary = {
   date: string;
@@ -35,6 +36,7 @@ function mapSurvey(survey: ApiSurvey): Survey {
 function mapComment(comment: ApiComment): Comment {
   return {
     ...comment,
+    canDelete: comment.can_delete,
     createdAt: comment.created_at,
     replies: comment.replies?.map(mapComment) ?? [],
   };
@@ -137,6 +139,17 @@ export async function likeComment(
     `/api/v1/surveys/${surveyId}/comments/${commentId}/like`,
     { method: "POST", token },
   );
+}
+
+export async function deleteComment(
+  token: string,
+  surveyId: number,
+  commentId: number,
+): Promise<void> {
+  await apiRequest<void>(`/api/v1/surveys/${surveyId}/comments/${commentId}`, {
+    method: "DELETE",
+    token,
+  });
 }
 
 export async function getActivities(token: string): Promise<Activity[]> {
