@@ -399,7 +399,8 @@ function SurveyCard({
             value={answer}
             onChange={(event) => setAnswer(event.target.value)}
             rows={2}
-            placeholder={t("response")}
+            placeholder={t("answerPlaceholder")}
+            aria-label={t("response")}
             maxLength={1000}
           />
           <button

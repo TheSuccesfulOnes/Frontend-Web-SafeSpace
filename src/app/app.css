@@ -921,6 +921,12 @@ input::placeholder {
     monospace;
   letter-spacing: 0.03em;
 }
+.comment-like {
+  color: var(--muted);
+  font:
+    10px "DM Mono",
+    monospace;
+}
 .comment-reply-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
