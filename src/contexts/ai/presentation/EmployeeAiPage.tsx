@@ -317,7 +317,11 @@ export function EmployeeAiPage({
             <span aria-hidden="true">•</span>
           </div>
         )}
-        <div ref={chatEndRef} aria-hidden="true" />
+        <div
+          className="chat-scroll-anchor"
+          ref={chatEndRef}
+          aria-hidden="true"
+        />
       </div>
       <form className="chat-composer" onSubmit={submitMessage}>
         <textarea
