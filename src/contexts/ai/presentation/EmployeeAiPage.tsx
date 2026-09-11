@@ -37,6 +37,7 @@ export function EmployeeAiPage({
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const chatWindowRef = useRef<HTMLDivElement | null>(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     getConversations(token)
       .then(setConversations)
@@ -48,11 +49,17 @@ export function EmployeeAiPage({
   }, [onUnauthorized, t, token]);
   useEffect(() => {
     const chatWindow = chatWindowRef.current;
-    if (!chatWindow) return;
-    chatWindow.scrollTo({
-      top: chatWindow.scrollHeight,
-      behavior: "smooth",
+    const chatEnd = chatEndRef.current;
+    if (!chatWindow || !chatEnd) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      chatEnd.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     });
+
+    return () => window.cancelAnimationFrame(frameId);
   }, [messages, pending]);
 
   async function openConversation(conversation: AiConversation) {
@@ -84,6 +91,13 @@ export function EmployeeAiPage({
     setDraft("");
     setPending(true);
     setError("");
+    const optimisticMessage: AiMessage = {
+      id: -Date.now(),
+      sender: "USER",
+      content,
+      createdAt: new Date().toISOString(),
+    };
+    setMessages((current) => [...current, optimisticMessage]);
     try {
       setMessages(await sendMessage(token, active.id, content, language));
     } catch (errorValue) {
@@ -272,6 +286,7 @@ export function EmployeeAiPage({
         className="chat-window"
         ref={chatWindowRef}
         aria-live="polite"
+        aria-busy={pending}
         tabIndex={0}
       >
         {messages.length ? (
@@ -294,13 +309,15 @@ export function EmployeeAiPage({
         {pending && (
           <div
             className="chat-message assistant typing"
-            aria-label={t("loading")}
+            aria-label={t("aiThinking")}
+            role="status"
           >
-            <span>•</span>
-            <span>•</span>
-            <span>•</span>
+            <span aria-hidden="true">•</span>
+            <span aria-hidden="true">•</span>
+            <span aria-hidden="true">•</span>
           </div>
         )}
+        <div ref={chatEndRef} aria-hidden="true" />
       </div>
       <form className="chat-composer" onSubmit={submitMessage}>
         <textarea

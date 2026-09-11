@@ -241,6 +241,7 @@ export const translations = {
     confirmDeleteText: "Esta acción no se puede deshacer.",
     cancel: "Cancelar",
     confirm: "Confirmar",
+    aiThinking: "La IA está pensando…",
     assistantUnavailable: "El asistente no está disponible en este momento.",
     systemAdminPortal:
       "Esta cuenta debe ingresar desde la consola de administración.",
@@ -481,6 +482,7 @@ export const translations = {
     confirmDeleteText: "This action cannot be undone.",
     cancel: "Cancel",
     confirm: "Confirm",
+    aiThinking: "AI is thinking…",
     assistantUnavailable: "The assistant is not available right now.",
     systemAdminPortal:
       "This account must sign in through the administration console.",

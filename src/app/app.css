@@ -1822,10 +1822,12 @@ input::placeholder {
   min-height: 0;
 }
 .ai-conversation-page .chat-window {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   height: auto;
   min-height: 0;
   max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .ai-conversation-page .chat-composer,
 .ai-conversation-page .ai-disclaimer {
@@ -2003,6 +2005,7 @@ input::placeholder {
   border-radius: 16px 16px 16px 4px;
   background: var(--panel);
   line-height: 1.6;
+  animation: chat-message-in 180ms ease-out both;
 }
 .chat-message p {
   margin: 0;
@@ -2041,8 +2044,11 @@ input::placeholder {
 }
 .typing {
   display: flex;
+  align-items: center;
   gap: 5px;
   width: max-content;
+  min-height: 43px;
+  padding: 11px 15px;
 }
 .typing span {
   animation: typing 900ms infinite ease-in-out;
@@ -2066,6 +2072,16 @@ input::placeholder {
   30% {
     opacity: 1;
     transform: translateY(-3px);
+  }
+}
+@keyframes chat-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 .chat-composer {
