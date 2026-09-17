@@ -66,7 +66,7 @@ export function RegisterPage({
               required
               maxLength={100}
               autoComplete="name"
-              placeholder="ej. Carlos Mendoza"
+              placeholder={t("displayNamePlaceholder")}
             />
           </label>
           <label>
@@ -77,7 +77,7 @@ export function RegisterPage({
               required
               maxLength={50}
               autoComplete="username"
-              placeholder="tu.usuario"
+              placeholder={t("usernamePlaceholder")}
             />
           </label>
           <label>
@@ -88,7 +88,7 @@ export function RegisterPage({
               onChange={(event) => update("email", event.target.value)}
               required
               autoComplete="email"
-              placeholder="tu@correo.com"
+              placeholder={t("emailPlaceholder")}
             />
           </label>
           <div className="form-columns">
@@ -101,7 +101,7 @@ export function RegisterPage({
               minLength={8}
               maxLength={72}
               autoComplete="new-password"
-              placeholder="Mínimo 8 caracteres"
+              placeholder={t("passwordPlaceholder")}
             />
             <PasswordField
               id="web-register-confirm-password"
@@ -114,7 +114,7 @@ export function RegisterPage({
               minLength={8}
               maxLength={72}
               autoComplete="new-password"
-              placeholder="Repite tu contraseña"
+              placeholder={t("confirmPasswordPlaceholder")}
             />
           </div>
           {error && (
