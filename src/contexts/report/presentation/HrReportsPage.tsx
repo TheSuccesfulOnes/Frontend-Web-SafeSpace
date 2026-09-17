@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   Report,
   ReportPriority,
@@ -11,6 +11,7 @@ import {
 } from "../../../infrastructure/content/contentService";
 import { isUnauthorized } from "../../../infrastructure/api/apiClient";
 import { Spinner } from "../../../shared/ui/Spinner";
+import { useLiveRefresh } from "../../../shared/hooks/useLiveRefresh";
 
 type Filter = "ALL" | "IN_REVIEW" | "ADDRESSED";
 
@@ -27,24 +28,38 @@ export function HrReportsPage({
   const [selected, setSelected] = useState<Report | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const requestInFlightRef = useRef(false);
 
-  async function load() {
-    setLoading(true);
+  async function load(background = false) {
+    if (requestInFlightRef.current) return;
+    requestInFlightRef.current = true;
+    if (!background) setLoading(true);
     setError("");
-    setSelected(null);
+    if (!background) setSelected(null);
     try {
-      setReports(await getAllReports(token));
+      const nextReports = await getAllReports(token);
+      setReports(nextReports);
+      if (background) {
+        setSelected((current) =>
+          current
+            ? (nextReports.find((report) => report.id === current.id) ?? null)
+            : null,
+        );
+      }
     } catch (errorValue) {
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
     } finally {
-      setLoading(false);
+      requestInFlightRef.current = false;
+      if (!background) setLoading(false);
     }
   }
 
   useEffect(() => {
     void load();
   }, [onUnauthorized, t, token]);
+
+  useLiveRefresh(() => load(true));
   const visible = useMemo(
     () =>
       reports.filter(

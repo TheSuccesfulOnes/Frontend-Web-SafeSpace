@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Activity, Comment, Survey } from "../../../domain/types";
 import { useLanguage } from "../../../i18n/LanguageProvider";
 import {
@@ -13,6 +13,7 @@ import {
 import { isUnauthorized } from "../../../infrastructure/api/apiClient";
 import { SuccessMessage } from "../../../shared/ui/SuccessMessage";
 import { Spinner } from "../../../shared/ui/Spinner";
+import { useLiveRefresh } from "../../../shared/hooks/useLiveRefresh";
 
 type ManagementTab = "surveys" | "activities";
 
@@ -41,12 +42,17 @@ export function HrManagementPage({
     null,
   );
   const [commentsError, setCommentsError] = useState("");
+  const requestInFlightRef = useRef(false);
 
-  async function load() {
-    setLoading(true);
+  async function load(background = false) {
+    if (requestInFlightRef.current) return;
+    requestInFlightRef.current = true;
+    if (!background) setLoading(true);
     setError("");
-    setExpandedSurveyId(null);
-    setSurveyComments({});
+    if (!background) {
+      setExpandedSurveyId(null);
+      setSurveyComments({});
+    }
     try {
       const [nextSurveys, nextActivities] = await Promise.all([
         getManagedSurveys(token),
@@ -58,12 +64,15 @@ export function HrManagementPage({
       if (isUnauthorized(errorValue)) onUnauthorized();
       else setError(t("errorGeneric"));
     } finally {
-      setLoading(false);
+      requestInFlightRef.current = false;
+      if (!background) setLoading(false);
     }
   }
   useEffect(() => {
     void load();
   }, [token]);
+
+  useLiveRefresh(() => load(true));
 
   async function publishOrClose(survey: Survey) {
     try {

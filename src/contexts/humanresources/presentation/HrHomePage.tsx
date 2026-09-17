@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Mood, MoodSummary } from "../../../domain/types";
 import { useLanguage } from "../../../i18n/LanguageProvider";
 import { getMoodSummary } from "../../../infrastructure/content/contentService";
 import { isUnauthorized } from "../../../infrastructure/api/apiClient";
 import { Spinner } from "../../../shared/ui/Spinner";
+import { useLiveRefresh } from "../../../shared/hooks/useLiveRefresh";
 
 const moodColors: Record<Mood, string> = {
   VERY_GOOD: "#426e55",
@@ -25,18 +26,30 @@ export function HrHomePage({
   const [summary, setSummary] = useState<MoodSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  useEffect(() => {
-    setLoading(true);
+  const requestInFlightRef = useRef(false);
+
+  async function load(background = false) {
+    if (requestInFlightRef.current) return;
+    requestInFlightRef.current = true;
+    if (!background) setLoading(true);
     setError("");
-    setSummary(null);
-    getMoodSummary(token)
-      .then(setSummary)
-      .catch((errorValue: unknown) => {
-        if (isUnauthorized(errorValue)) onUnauthorized();
-        else setError(t("errorGeneric"));
-      })
-      .finally(() => setLoading(false));
+    if (!background) setSummary(null);
+    try {
+      setSummary(await getMoodSummary(token));
+    } catch (errorValue) {
+      if (isUnauthorized(errorValue)) onUnauthorized();
+      else setError(t("errorGeneric"));
+    } finally {
+      requestInFlightRef.current = false;
+      if (!background) setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void load();
   }, [onUnauthorized, t, token]);
+
+  useLiveRefresh(() => load(true));
 
   const chart = useMemo(() => {
     if (!summary) return "conic-gradient(#dfe6e1 0 100%)";
