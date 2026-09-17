@@ -2579,6 +2579,51 @@ input::placeholder {
   display: grid;
   gap: 15px;
 }
+.password-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.password-field > label {
+  margin: 0;
+}
+.password-input-wrap {
+  position: relative;
+  min-width: 0;
+}
+.password-input-wrap input {
+  width: 100%;
+  padding-right: 46px;
+}
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  color: var(--muted);
+  background: transparent;
+  transform: translateY(-50%);
+  transition:
+    background 160ms ease,
+    color 160ms ease;
+}
+.password-toggle:hover {
+  color: var(--ink);
+  background: var(--line);
+}
+.password-toggle:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+.password-toggle .material-symbols-rounded {
+  font-size: 19px;
+}
 .stack-form input {
   border-radius: 10px;
   background: var(--panel-soft);
@@ -2592,6 +2637,9 @@ input::placeholder {
   order: 0;
 }
 .label-with-action > label {
+  order: 1;
+}
+.label-with-action > .password-field {
   order: 1;
 }
 .label-with-action > label input {

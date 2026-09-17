@@ -4,6 +4,7 @@ import { useLanguage } from "../../../i18n/LanguageProvider";
 import { register } from "../../../infrastructure/auth/authService";
 import { Spinner } from "../../../shared/ui/Spinner";
 import { AuthLayout } from "./AuthLayout";
+import { PasswordField } from "../../../shared/ui/PasswordField";
 
 export function RegisterPage({
   onBack,
@@ -91,34 +92,30 @@ export function RegisterPage({
             />
           </label>
           <div className="form-columns">
-            <label>
-              {t("password")}
-              <input
-                type="password"
-                value={form.password}
-                onChange={(event) => update("password", event.target.value)}
-                required
-                minLength={8}
-                maxLength={72}
-                autoComplete="new-password"
-                placeholder="Mínimo 8 caracteres"
-              />
-            </label>
-            <label>
-              {t("confirmPassword")}
-              <input
-                type="password"
-                value={form.confirmPassword}
-                onChange={(event) =>
-                  update("confirmPassword", event.target.value)
-                }
-                required
-                minLength={8}
-                maxLength={72}
-                autoComplete="new-password"
-                placeholder="Repite tu contraseña"
-              />
-            </label>
+            <PasswordField
+              id="web-register-password"
+              label={t("password")}
+              value={form.password}
+              onChange={(event) => update("password", event.target.value)}
+              required
+              minLength={8}
+              maxLength={72}
+              autoComplete="new-password"
+              placeholder="Mínimo 8 caracteres"
+            />
+            <PasswordField
+              id="web-register-confirm-password"
+              label={t("confirmPassword")}
+              value={form.confirmPassword}
+              onChange={(event) =>
+                update("confirmPassword", event.target.value)
+              }
+              required
+              minLength={8}
+              maxLength={72}
+              autoComplete="new-password"
+              placeholder="Repite tu contraseña"
+            />
           </div>
           {error && (
             <p className="form-error" role="alert">

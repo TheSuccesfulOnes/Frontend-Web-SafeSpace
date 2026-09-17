@@ -5,6 +5,7 @@ import { useLanguage } from "../../../i18n/LanguageProvider";
 import { login } from "../../../infrastructure/auth/authService";
 import { Spinner } from "../../../shared/ui/Spinner";
 import { AuthLayout } from "./AuthLayout";
+import { PasswordField } from "../../../shared/ui/PasswordField";
 
 type LoginPageProps = {
   onLogin: (session: AuthSession) => void;
@@ -56,17 +57,15 @@ export function LoginPage({ onLogin, onRegister, onRecovery }: LoginPageProps) {
             />
           </label>
           <div className="label-with-action">
-            <label>
-              {t("password")}
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="current-password"
-                required
-                placeholder="••••••••"
-              />
-            </label>
+            <PasswordField
+              id="web-login-password"
+              label={t("password")}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              autoComplete="current-password"
+              required
+              placeholder="••••••••"
+            />
           </div>
           {error && (
             <p className="form-error" role="alert">
@@ -94,7 +93,6 @@ export function LoginPage({ onLogin, onRegister, onRecovery }: LoginPageProps) {
           </button>
         </p>
       </div>
-
     </AuthLayout>
   );
 }
