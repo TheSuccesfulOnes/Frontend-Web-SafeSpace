@@ -37,7 +37,6 @@ export function EmployeeAiPage({
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const chatWindowRef = useRef<HTMLDivElement | null>(null);
-  const chatEndRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     getConversations(token)
       .then(setConversations)
@@ -49,13 +48,12 @@ export function EmployeeAiPage({
   }, [onUnauthorized, t, token]);
   useEffect(() => {
     const chatWindow = chatWindowRef.current;
-    const chatEnd = chatEndRef.current;
-    if (!chatWindow || !chatEnd) return;
+    if (!chatWindow) return;
 
     const frameId = window.requestAnimationFrame(() => {
-      chatEnd.scrollIntoView({
+      chatWindow.scrollTo({
+        top: chatWindow.scrollHeight,
         behavior: "smooth",
-        block: "end",
       });
     });
 
@@ -317,11 +315,6 @@ export function EmployeeAiPage({
             <span aria-hidden="true">•</span>
           </div>
         )}
-        <div
-          className="chat-scroll-anchor"
-          ref={chatEndRef}
-          aria-hidden="true"
-        />
       </div>
       <form className="chat-composer" onSubmit={submitMessage}>
         <textarea

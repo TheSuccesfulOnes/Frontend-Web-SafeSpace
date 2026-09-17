@@ -1,7 +1,9 @@
 .app-shell {
   display: grid;
   grid-template-columns: 248px minmax(0, 1fr);
+  height: 100dvh;
   min-height: 100dvh;
+  overflow: hidden;
   background: var(--paper);
 }
 .sidebar {
@@ -234,9 +236,9 @@
 }
 .main-shell {
   display: flex;
-  height: 100dvh;
+  height: 100%;
   min-width: 0;
-  min-height: 100dvh;
+  min-height: 0;
   flex-direction: column;
   overflow: hidden;
 }
@@ -302,10 +304,11 @@
 }
 .page-content {
   display: flex;
-  flex: 1;
+  flex: 1 1 0;
   flex-direction: column;
   width: 100%;
   max-width: none;
+  min-width: 0;
   min-height: 0;
   margin: 0;
   overflow-y: auto;
@@ -314,6 +317,7 @@
 .page-content > .content-stack {
   width: 100%;
   max-width: 1270px;
+  min-width: 0;
 }
 .page-footer {
   flex: 0 0 auto;
@@ -1819,15 +1823,17 @@ input::placeholder {
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  height: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: auto;
+  max-height: none;
   min-height: 0;
   overflow: hidden;
 }
 .ai-conversation-page .chat-window {
   flex: 1 1 0;
-  height: 0;
+  height: auto;
   min-height: 0;
+  min-width: 0;
   max-height: none;
   overflow-x: hidden;
   overflow-y: auto;
@@ -2000,6 +2006,7 @@ input::placeholder {
   scrollbar-gutter: stable;
   scrollbar-color: var(--line-strong) transparent;
   scroll-behavior: smooth;
+  touch-action: pan-y;
 }
 .chat-message {
   max-width: min(72%, 640px);
@@ -2044,11 +2051,6 @@ input::placeholder {
   color: var(--muted);
   font-size: 12px;
   line-height: 1.55;
-}
-.chat-scroll-anchor {
-  flex: 0 0 1px;
-  width: 1px;
-  height: 1px;
 }
 .typing {
   display: flex;
