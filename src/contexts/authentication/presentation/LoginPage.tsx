@@ -10,10 +10,9 @@ import { PasswordField } from "../../../shared/ui/PasswordField";
 type LoginPageProps = {
   onLogin: (session: AuthSession) => void;
   onRegister: () => void;
-  onRecovery: () => void;
 };
 
-export function LoginPage({ onLogin, onRegister, onRecovery }: LoginPageProps) {
+export function LoginPage({ onLogin, onRegister }: LoginPageProps) {
   const { t } = useLanguage();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -72,9 +71,6 @@ export function LoginPage({ onLogin, onRegister, onRecovery }: LoginPageProps) {
               {error}
             </p>
           )}
-          <button type="button" className="text-action" onClick={onRecovery}>
-            {t("forgotPassword")}
-          </button>
           <button className="primary-button" type="submit" disabled={pending}>
             {pending ? (
               <>

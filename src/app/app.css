@@ -2670,10 +2670,6 @@ input::placeholder {
   margin-bottom: 24px;
   text-decoration: none;
 }
-.recovery-card {
-  max-width: 440px;
-}
-
 @media (max-width: 900px) {
   .app-shell {
     grid-template-columns: 1fr;

@@ -32,10 +32,9 @@ import { ProfilePage } from "../contexts/profile/presentation/ProfilePage";
 import { SettingsPage } from "../contexts/profile/presentation/SettingsPage";
 import { LoginPage } from "../contexts/authentication/presentation/LoginPage";
 import { RegisterPage } from "../contexts/authentication/presentation/RegisterPage";
-import { RecoveryPage } from "../contexts/authentication/presentation/RecoveryPage";
 import "./app.css";
 
-type AuthView = "login" | "register" | "recovery";
+type AuthView = "login" | "register";
 
 function allowedPage(role: AuthSession["role"], page: string): PageKey {
   const employeePages: PageKey[] = [
@@ -179,13 +178,10 @@ export function App() {
           onRegistered={() => setAuthView("login")}
         />
       );
-    if (authView === "recovery")
-      return <RecoveryPage onBack={() => setAuthView("login")} />;
     return (
       <LoginPage
         onLogin={handleLogin}
         onRegister={() => setAuthView("register")}
-        onRecovery={() => setAuthView("recovery")}
       />
     );
   }
