@@ -777,6 +777,13 @@ function ActivityCard({
     [options],
   );
 
+  function formatPercentage(value: number): string {
+    const normalized = Number.isFinite(value)
+      ? Math.min(100, Math.max(0, value))
+      : 0;
+    return `${normalized.toFixed(1)}%`;
+  }
+
   async function vote() {
     if (selected === null) return;
     setPending(true);
@@ -841,7 +848,8 @@ function ActivityCard({
               <span className="activity-option-copy">
                 <strong>{option.label}</strong>
                 <small>
-                  {option.percentage}% · {option.votes} {t("votes")}
+                  {formatPercentage(option.percentage)} · {option.votes}{" "}
+                  {t("votes")}
                 </small>
                 {votedOptionId === option.id && selected === option.id && (
                   <small className="activity-option-voted">
