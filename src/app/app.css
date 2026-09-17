@@ -634,6 +634,12 @@
   color: #4e5c9b;
   background: var(--lilac);
   font-size: 21px;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 500,
+    "GRAD" 0,
+    "opsz" 24;
+  line-height: 1;
 }
 .resource-blue .resource-icon {
   color: #115b8a;

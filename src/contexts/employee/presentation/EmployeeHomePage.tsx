@@ -139,8 +139,11 @@ export function EmployeeHomePage({
       </div>
       <div className="resource-grid">
         <article className="resource-card resource-lilac">
-          <span className="resource-icon" aria-hidden="true">
-            ⌁
+          <span
+            className="resource-icon material-symbols-rounded"
+            aria-hidden="true"
+          >
+            monitor_heart
           </span>
           <div>
             <h3>{t("wellbeingMetrics")}</h3>
@@ -148,8 +151,11 @@ export function EmployeeHomePage({
           </div>
         </article>
         <article className="resource-card resource-blue">
-          <span className="resource-icon" aria-hidden="true">
-            ⌁
+          <span
+            className="resource-icon material-symbols-rounded"
+            aria-hidden="true"
+          >
+            self_improvement
           </span>
           <div>
             <h3>{t("guidedResources")}</h3>
