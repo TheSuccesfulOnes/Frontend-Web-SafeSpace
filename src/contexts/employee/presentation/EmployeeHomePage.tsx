@@ -39,7 +39,7 @@ export function EmployeeHomePage({
   displayName: string;
   onUnauthorized: () => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [todayMood, setTodayMood] = useState<MoodToday | null>(null);
   const [loading, setLoading] = useState(true);
   const [savingMood, setSavingMood] = useState<Mood | null>(null);
@@ -57,12 +57,12 @@ export function EmployeeHomePage({
 
   const today = useMemo(
     () =>
-      new Intl.DateTimeFormat(undefined, {
+      new Intl.DateTimeFormat(language === "es" ? "es-PE" : "en-US", {
         weekday: "long",
         day: "numeric",
         month: "long",
       }).format(new Date()),
-    [],
+    [language],
   );
 
   async function selectMood(mood: Mood) {

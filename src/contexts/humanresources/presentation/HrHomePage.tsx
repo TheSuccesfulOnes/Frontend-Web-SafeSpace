@@ -21,7 +21,7 @@ export function HrHomePage({
   displayName: string;
   onUnauthorized: () => void;
 }) {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const [summary, setSummary] = useState<MoodSummary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -69,11 +69,14 @@ export function HrHomePage({
   const date = summary?.date
     ? new Date(`${summary.date}T12:00:00`)
     : new Date();
-  const formattedDate = new Intl.DateTimeFormat(undefined, {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  }).format(date);
+  const formattedDate = new Intl.DateTimeFormat(
+    language === "es" ? "es-PE" : "en-US",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    },
+  ).format(date);
 
   return (
     <section className="content-stack">
