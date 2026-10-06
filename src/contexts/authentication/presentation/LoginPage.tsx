@@ -29,6 +29,9 @@ export function LoginPage({ onLogin, onRegister }: LoginPageProps) {
       if (nextSession.role === "SYSTEM_ADMIN") {
         throw new Error(t("systemAdminPortal"));
       }
+      if (!["EMPLOYEE", "HR_MEMBER"].includes(nextSession.role)) {
+        throw new Error(t("errorGeneric"));
+      }
       onLogin(nextSession);
     } catch (errorValue) {
       setError(
