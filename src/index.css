@@ -22,6 +22,7 @@
   --lilac: #e2d0fa;
   --gold: #e9c36c;
   --danger: #b64f43;
+  --success: #267341;
 }
 
 :root[data-theme="dark"] {
@@ -42,6 +43,7 @@
   --lilac: #b99cdc;
   --gold: #f5d98d;
   --danger: #ff9c8f;
+  --success: #83d69d;
 }
 
 * {

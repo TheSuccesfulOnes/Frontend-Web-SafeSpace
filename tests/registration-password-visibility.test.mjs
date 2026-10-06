@@ -97,10 +97,16 @@ test("shows password requirements only while a password is entered", () => {
   assert(html.includes('id="register-password-requirements"'));
   assert(html.includes('aria-describedby="register-password-requirements"'));
   assert.equal((html.match(/class="requirement-met"/g) ?? []).length, 1);
+  assert.equal((html.match(/class="requirement-pending"/g) ?? []).length, 4);
+  assert.equal((html.match(/>check_circle<\/span>/g) ?? []).length, 1);
+  assert.equal((html.match(/>cancel<\/span>/g) ?? []).length, 4);
 
   passwordChange({ target: { value: "SafeSpace1!" } });
   html = render();
   assert.equal((html.match(/class="requirement-met"/g) ?? []).length, 5);
+  assert.equal((html.match(/>check_circle<\/span>/g) ?? []).length, 5);
+  assert(!html.includes('class="requirement-pending"'));
+  assert(!html.includes(">cancel</span>"));
 
   passwordChange({ target: { value: "" } });
   assertHidden(render());

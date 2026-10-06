@@ -167,13 +167,15 @@ export function RegisterPage({
                   ([key, met]) => (
                     <li
                       key={key}
-                      className={met ? "requirement-met" : undefined}
+                      className={
+                        met ? "requirement-met" : "requirement-pending"
+                      }
                     >
                       <span
                         className="material-symbols-rounded"
                         aria-hidden="true"
                       >
-                        {met ? "check_circle" : "radio_button_unchecked"}
+                        {met ? "check_circle" : "cancel"}
                       </span>
                       <span>{t(key as TranslationKey)}</span>
                       <span className="sr-only">
