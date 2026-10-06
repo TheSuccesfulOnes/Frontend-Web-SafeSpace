@@ -128,7 +128,11 @@ export function RegisterPage({
               maxLength={72}
               autoComplete="new-password"
               placeholder={t("passwordPlaceholder")}
-              aria-describedby="register-password-requirements"
+              aria-describedby={
+                form.password.length > 0
+                  ? "register-password-requirements"
+                  : undefined
+              }
             />
             <PasswordField
               id="web-register-confirm-password"
@@ -152,35 +156,40 @@ export function RegisterPage({
               }
             />
           </div>
-          <div
-            id="register-password-requirements"
-            className="password-requirements"
-          >
-            <p>{t("passwordRequirementsTitle")}</p>
-            <ul>
-              {Object.entries(passwordRequirements(form.password)).map(
-                ([key, met]) => (
-                  <li key={key} className={met ? "requirement-met" : undefined}>
-                    <span
-                      className="material-symbols-rounded"
-                      aria-hidden="true"
+          {form.password.length > 0 && (
+            <div
+              id="register-password-requirements"
+              className="password-requirements"
+            >
+              <p>{t("passwordRequirementsTitle")}</p>
+              <ul>
+                {Object.entries(passwordRequirements(form.password)).map(
+                  ([key, met]) => (
+                    <li
+                      key={key}
+                      className={met ? "requirement-met" : undefined}
                     >
-                      {met ? "check_circle" : "radio_button_unchecked"}
-                    </span>
-                    <span>{t(key as TranslationKey)}</span>
-                    <span className="sr-only">
-                      {t(met ? "requirementMet" : "requirementPending")}
-                    </span>
-                  </li>
-                ),
+                      <span
+                        className="material-symbols-rounded"
+                        aria-hidden="true"
+                      >
+                        {met ? "check_circle" : "radio_button_unchecked"}
+                      </span>
+                      <span>{t(key as TranslationKey)}</span>
+                      <span className="sr-only">
+                        {t(met ? "requirementMet" : "requirementPending")}
+                      </span>
+                    </li>
+                  ),
+                )}
+              </ul>
+              {!passwordWithinLimit(form.password) && (
+                <p className="form-error" role="alert">
+                  {t("passwordTooLong")}
+                </p>
               )}
-            </ul>
-            {!passwordWithinLimit(form.password) && (
-              <p className="form-error" role="alert">
-                {t("passwordTooLong")}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
           {form.confirmPassword && form.password !== form.confirmPassword && (
             <p id="register-password-mismatch" className="form-error">
               {t("passwordMismatch")}
