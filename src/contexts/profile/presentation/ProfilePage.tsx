@@ -21,7 +21,11 @@ export function ProfilePage({ profile }: { profile: Profile }) {
 
   function chooseAvatar(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
-    if (!file || !file.type.startsWith("image/") || file.size > 1024 * 1024) {
+    if (
+      !file ||
+      !["image/png", "image/jpeg", "image/webp"].includes(file.type) ||
+      file.size > 1024 * 1024
+    ) {
       setError(t("errorGeneric"));
       return;
     }
