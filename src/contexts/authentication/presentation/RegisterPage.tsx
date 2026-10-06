@@ -5,6 +5,13 @@ import { register } from "../../../infrastructure/auth/authService";
 import { Spinner } from "../../../shared/ui/Spinner";
 import { AuthLayout } from "./AuthLayout";
 import { PasswordField } from "../../../shared/ui/PasswordField";
+import {
+  isRegistrationPasswordValid,
+  passwordRequirements,
+  passwordWithinLimit,
+} from "../domain/passwordPolicy";
+import { PRIVACY_POLICY_URL } from "../../../infrastructure/config/legal";
+import type { TranslationKey } from "../../../i18n/translations";
 
 export function RegisterPage({
   onBack,
@@ -26,12 +33,23 @@ export function RegisterPage({
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pending) return;
     if (!form.displayName.trim()) {
       setError(t("errorGeneric"));
       return;
     }
+    if (!isRegistrationPasswordValid(form.password)) {
+      setError(
+        t(
+          passwordWithinLimit(form.password)
+            ? "passwordRequirementsError"
+            : "passwordTooLong",
+        ),
+      );
+      return;
+    }
     if (form.password !== form.confirmPassword) {
-      setError(t("errorGeneric"));
+      setError("");
       return;
     }
     setPending(true);
@@ -40,8 +58,15 @@ export function RegisterPage({
       await register(form);
       onRegistered();
     } catch (errorValue) {
+      const message = errorValue instanceof Error ? errorValue.message : "";
       setError(
-        errorValue instanceof Error ? errorValue.message : t("errorGeneric"),
+        message.includes("special character")
+          ? t("passwordRequirementsError")
+          : message.includes("Password exceeds")
+            ? t("passwordTooLong")
+            : message === "Passwords do not match"
+              ? t("passwordMismatch")
+              : message || t("errorGeneric"),
       );
     } finally {
       setPending(false);
@@ -50,6 +75,7 @@ export function RegisterPage({
 
   function update(name: keyof typeof form, value: string) {
     setForm((current) => ({ ...current, [name]: value }));
+    setError("");
   }
 
   return (
@@ -102,6 +128,7 @@ export function RegisterPage({
               maxLength={72}
               autoComplete="new-password"
               placeholder={t("passwordPlaceholder")}
+              aria-describedby="register-password-requirements"
             />
             <PasswordField
               id="web-register-confirm-password"
@@ -115,8 +142,50 @@ export function RegisterPage({
               maxLength={72}
               autoComplete="new-password"
               placeholder={t("confirmPasswordPlaceholder")}
+              aria-invalid={Boolean(
+                form.confirmPassword && form.password !== form.confirmPassword,
+              )}
+              aria-describedby={
+                form.confirmPassword && form.password !== form.confirmPassword
+                  ? "register-password-mismatch"
+                  : undefined
+              }
             />
           </div>
+          <div
+            id="register-password-requirements"
+            className="password-requirements"
+          >
+            <p>{t("passwordRequirementsTitle")}</p>
+            <ul>
+              {Object.entries(passwordRequirements(form.password)).map(
+                ([key, met]) => (
+                  <li key={key} className={met ? "requirement-met" : undefined}>
+                    <span
+                      className="material-symbols-rounded"
+                      aria-hidden="true"
+                    >
+                      {met ? "check_circle" : "radio_button_unchecked"}
+                    </span>
+                    <span>{t(key as TranslationKey)}</span>
+                    <span className="sr-only">
+                      {t(met ? "requirementMet" : "requirementPending")}
+                    </span>
+                  </li>
+                ),
+              )}
+            </ul>
+            {!passwordWithinLimit(form.password) && (
+              <p className="form-error" role="alert">
+                {t("passwordTooLong")}
+              </p>
+            )}
+          </div>
+          {form.confirmPassword && form.password !== form.confirmPassword && (
+            <p id="register-password-mismatch" className="form-error">
+              {t("passwordMismatch")}
+            </p>
+          )}
           {error && (
             <p className="form-error" role="alert">
               {error}
@@ -132,6 +201,18 @@ export function RegisterPage({
             )}
           </button>
           <p className="privacy-note">{t("privacyNotice")}</p>
+          <a
+            className="registration-policy-link"
+            href={PRIVACY_POLICY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t("privacyPolicyLink")}
+            <span className="material-symbols-rounded" aria-hidden="true">
+              open_in_new
+            </span>
+            <span className="sr-only">{t("opensNewTab")}</span>
+          </a>
         </form>
         <p className="auth-switch">
           {t("alreadyAccount")}{" "}
