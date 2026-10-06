@@ -1,5 +1,6 @@
 node_modules
 dist
+tests/.results
 .env
 .env.*
 !.env.example

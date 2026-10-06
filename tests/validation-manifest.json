@@ -1,0 +1,123 @@
+{
+  "minimumCasesPerSource": 20,
+  "owners": {
+    "src/contexts/authentication/domain/passwordPolicy.ts": {
+      "validations": "Unicode complexity, codepoint minimum, BCrypt UTF-8 byte ceiling",
+      "alsoExercisedBy": ["tests/authentication.test.tsx"]
+    },
+    "src/contexts/authentication/presentation/RegisterPage.tsx": {
+      "validations": "Required identity, password policy, confirmation, native constraints, pending submission and error mapping"
+    },
+    "src/contexts/authentication/presentation/LoginPage.tsx": {
+      "validations": "Nonblank credentials, portal role whitelist, pending controls and login failure handling"
+    },
+    "src/contexts/profile/presentation/ProfilePage.tsx": {
+      "validations": "Avatar MIME whitelist, 1 MiB limit, cancellation and persistence lifecycle"
+    },
+    "src/contexts/profile/presentation/SettingsPage.tsx": {
+      "validations": "Native account field constraints, preference choices, optional email, authorization failures and pending saves"
+    },
+    "src/contexts/survey/presentation/EmployeeSurveysPage.tsx": {
+      "validations": "Survey answers, comment replies/ownership/likes/deletion, selected votes, report fields, privacy and failures"
+    },
+    "src/contexts/ai/presentation/EmployeeAiPage.tsx": {
+      "validations": "Nonblank content, pending send, rename guards, delete confirmation, conversation lifecycle and authorization"
+    },
+    "src/contexts/humanresources/presentation/HrManagementPage.tsx": {
+      "validations": "Survey native fields, type/comments contract, activity option trimming/minimum, optional description and creation failures"
+    },
+    "src/infrastructure/auth/sessionStorage.ts": {
+      "validations": "Untrusted JSON shape, required identity/token/role/ID, invalid-state eviction and inaccessible storage",
+      "alsoExercisedBy": ["tests/app.test.tsx"]
+    },
+    "src/infrastructure/preferences/preferenceStore.ts": {
+      "validations": "Language/theme allowlists, per-user isolation and overwrite behavior",
+      "alsoExercisedBy": [
+        "tests/app.test.tsx",
+        "tests/profile-settings.test.tsx"
+      ]
+    },
+    "src/infrastructure/api/apiClient.ts": {
+      "validations": "Error payload types, unauthorized classification, HTTP status/no-content/non-JSON handling and authentication headers",
+      "alsoExercisedBy": [
+        "tests/services.test.ts",
+        "tests/authentication.test.tsx",
+        "tests/surveys.test.tsx"
+      ]
+    },
+    "src/infrastructure/auth/authService.ts": {
+      "validations": "Identity trimming, exact password preservation, server identity mapping and typed errors"
+    },
+    "src/infrastructure/profile/profileService.ts": {
+      "validations": "Identity trimming, optional email null conversion, language/theme normalization and token rotation"
+    },
+    "src/infrastructure/content/contentService.ts": {
+      "validations": "Answer/comment normalization, parent/ownership/timestamp mapping, survey comment policy, lifecycle and privacy contracts"
+    },
+    "src/infrastructure/ai/aiService.ts": {
+      "validations": "Content/title trimming, message date mapping, scoped conversation IDs and failure contracts"
+    },
+    "src/app/App.tsx": {
+      "validations": "Role-based route allowlists, restored/login sessions, forged hashes, unauthorized logout and restricted admin portal"
+    },
+    "src/contexts/employee/presentation/EmployeeHomePage.tsx": {
+      "validations": "One mood per day, loading/pending/already-saved guards, retry and authentication failures"
+    },
+    "src/contexts/report/presentation/HrReportsPage.tsx": {
+      "validations": "Anonymous identity suppression, status lifecycle, selected record reconciliation, refresh deduplication and errors"
+    },
+    "src/contexts/humanresources/presentation/HrHomePage.tsx": {
+      "validations": "Summary request deduplication, visible/background lifecycle, current token, zero/missing metric fallbacks and errors"
+    },
+    "src/shared/hooks/useLiveRefresh.ts": {
+      "validations": "Visibility/pending refresh guards, timing boundaries, callback freshness, error containment and listener cleanup"
+    }
+  },
+  "excluded": {
+    "src/app/app.css": "Presentation styles; no executable validation. Existing contrast regression retained elsewhere.",
+    "src/index.css": "Presentation tokens and styles; color checks are visual regressions, not validation-owner cases.",
+    "src/vite-env.d.ts": "Compile-time declarations only.",
+    "src/main.tsx": "React bootstrap and provider wiring; no input/business/security validator.",
+    "src/shared/ui/SuccessMessage.tsx": "Message visibility and dismissal timing are presentation lifecycle only; no data/security/business rule.",
+    "src/shared/ui/StatusMessage.tsx": "Error/status presentation conditionals only; unused retry button does not validate data.",
+    "src/shared/ui/Spinner.tsx": "Loading indicator only.",
+    "src/shared/ui/PasswordField.tsx": "Visibility toggle and native attribute forwarding; validation belongs to consuming forms and passwordPolicy.",
+    "src/shared/ui/Logo.tsx": "Image/compact display only.",
+    "src/shared/ui/LanguageSwitcher.tsx": "Fixed language button choices and selected presentation; allowlist validation belongs to preferenceStore/profileService.",
+    "src/i18n/translations.ts": "Static translation dictionary.",
+    "src/i18n/LanguageProvider.tsx": "React context wiring and provider-presence programming guard; no runtime input policy.",
+    "src/shared/layout/AppShell.tsx": "Role-specific navigation presentation, initials and menu state. Actual route security is enforced in App and tested there.",
+    "src/domain/types.ts": "Compile-time types; these are not runtime validators.",
+    "src/infrastructure/config/legal.ts": "Static policy link, no URL validation.",
+    "src/infrastructure/config/env.ts": "Build-time URL default and trailing-slash normalization, not an active user-data/security/business validator.",
+    "src/contexts/authentication/presentation/AuthLayout.tsx": "Layout and branding only."
+  },
+  "legacy": [
+    {
+      "suite": "tests/registration-password-policy.test.mjs",
+      "source": "src/contexts/authentication/domain/passwordPolicy.ts",
+      "type": "unit",
+      "caseNames": [
+        "accepts valid registration passwords with accents and symbols",
+        "rejects missing requirements and whitespace as a special character",
+        "enforces the BCrypt UTF-8 byte limit"
+      ]
+    },
+    {
+      "suite": "tests/registration-password-colors.test.mjs",
+      "source": null,
+      "type": "visual-regression",
+      "caseNames": [
+        "password status indicators contrast with light and dark surfaces"
+      ]
+    },
+    {
+      "suite": "tests/registration-password-visibility.test.mjs",
+      "source": null,
+      "type": "render-regression",
+      "caseNames": [
+        "shows password requirements only while a password is entered"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2348 @@
+{
+  "schemaVersion": 1,
+  "command": "npm test",
+  "minimumCasesPerSource": 20,
+  "countsAreExecutedIndividualCases": true,
+  "coveragePercentagesMeasured": false,
+  "totals": {
+    "validationOwners": 20,
+    "vitestCases": 489,
+    "nodeCases": 5,
+    "validationCases": 492,
+    "retainedNonValidationCases": 2,
+    "executedCases": 494,
+    "failed": 0,
+    "skipped": 0
+  },
+  "sources": {
+    "src/contexts/authentication/domain/passwordPolicy.ts": {
+      "validations": "Unicode complexity, codepoint minimum, BCrypt UTF-8 byte ceiling",
+      "alsoExercisedBy": [
+        "tests/authentication.test.tsx"
+      ],
+      "actualCaseCount": 27,
+      "unitCases": 27,
+      "integrationCases": 0,
+      "suites": [
+        {
+          "suite": "tests/policies-storage.test.ts",
+          "type": "unit",
+          "actualCaseCount": 24,
+          "cases": [
+            {
+              "name": "minimum eight",
+              "status": "passed"
+            },
+            {
+              "name": "seven codepoints",
+              "status": "passed"
+            },
+            {
+              "name": "no uppercase",
+              "status": "passed"
+            },
+            {
+              "name": "no lowercase",
+              "status": "passed"
+            },
+            {
+              "name": "no digit",
+              "status": "passed"
+            },
+            {
+              "name": "no symbol",
+              "status": "passed"
+            },
+            {
+              "name": "space",
+              "status": "passed"
+            },
+            {
+              "name": "NBSP",
+              "status": "passed"
+            },
+            {
+              "name": "newline",
+              "status": "passed"
+            },
+            {
+              "name": "tab",
+              "status": "passed"
+            },
+            {
+              "name": "control",
+              "status": "passed"
+            },
+            {
+              "name": "format control",
+              "status": "passed"
+            },
+            {
+              "name": "accent letters",
+              "status": "passed"
+            },
+            {
+              "name": "Arabic decimal",
+              "status": "passed"
+            },
+            {
+              "name": "emoji symbol",
+              "status": "passed"
+            },
+            {
+              "name": "72 ASCII bytes",
+              "status": "passed"
+            },
+            {
+              "name": "73 ASCII bytes",
+              "status": "passed"
+            },
+            {
+              "name": "72 multibyte bytes",
+              "status": "passed"
+            },
+            {
+              "name": "74 multibyte bytes",
+              "status": "passed"
+            },
+            {
+              "name": "astral counts once",
+              "status": "passed"
+            },
+            {
+              "name": "empty",
+              "status": "passed"
+            },
+            {
+              "name": "letter numeral not decimal",
+              "status": "passed"
+            },
+            {
+              "name": "returns independent requirement feedback",
+              "status": "passed"
+            },
+            {
+              "name": "byte ceiling independent of complexity",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "suite": "tests/registration-password-policy.test.mjs",
+          "type": "unit",
+          "actualCaseCount": 3,
+          "cases": [
+            {
+              "name": "accepts valid registration passwords with accents and symbols",
+              "status": "passed"
+            },
+            {
+              "name": "rejects missing requirements and whitespace as a special character",
+              "status": "passed"
+            },
+            {
+              "name": "enforces the BCrypt UTF-8 byte limit",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/authentication/presentation/RegisterPage.tsx": {
+      "validations": "Required identity, password policy, confirmation, native constraints, pending submission and error mapping",
+      "actualCaseCount": 23,
+      "unitCases": 0,
+      "integrationCases": 23,
+      "suites": [
+        {
+          "suite": "tests/authentication.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 23,
+          "cases": [
+            {
+              "name": "blocks empty name before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks whitespace name before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks short password before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks no uppercase before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks no lowercase before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks no digit before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks no special before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks whitespace special before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks UTF8 overflow before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks confirmation mismatch before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "blocks empty confirmation before fetch",
+              "status": "passed"
+            },
+            {
+              "name": "accepts valid password Password1! through real service",
+              "status": "passed"
+            },
+            {
+              "name": "accepts valid password Árbol123! through real service",
+              "status": "passed"
+            },
+            {
+              "name": "accepts valid password Ab1!aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa through real service",
+              "status": "passed"
+            },
+            {
+              "name": "maps API message needs special character",
+              "status": "passed"
+            },
+            {
+              "name": "maps API message Password exceeds 72",
+              "status": "passed"
+            },
+            {
+              "name": "maps API message Passwords do not match",
+              "status": "passed"
+            },
+            {
+              "name": "maps API message Username already exists",
+              "status": "passed"
+            },
+            {
+              "name": "clears previous error on editing and retries successfully",
+              "status": "passed"
+            },
+            {
+              "name": "pending submit guard prevents duplicate form events",
+              "status": "passed"
+            },
+            {
+              "name": "native required username prevents click submit",
+              "status": "passed"
+            },
+            {
+              "name": "native malformed email prevents click submit",
+              "status": "passed"
+            },
+            {
+              "name": "typing beyond username maximum keeps 50 characters",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/authentication/presentation/LoginPage.tsx": {
+      "validations": "Nonblank credentials, portal role whitelist, pending controls and login failure handling",
+      "actualCaseCount": 23,
+      "unitCases": 0,
+      "integrationCases": 23,
+      "suites": [
+        {
+          "suite": "tests/authentication.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 23,
+          "cases": [
+            {
+              "name": "blocks empty identifier",
+              "status": "passed"
+            },
+            {
+              "name": "blocks whitespace identifier",
+              "status": "passed"
+            },
+            {
+              "name": "blocks empty password",
+              "status": "passed"
+            },
+            {
+              "name": "username forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "email forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "trim identifier forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "HR role forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "password preserved forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "old short password allowed forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "Unicode identifier forwards exact credentials and mapped session",
+              "status": "passed"
+            },
+            {
+              "name": "blocks system admin session from employee portal",
+              "status": "passed"
+            },
+            {
+              "name": "fails closed for unsupported server role ADMIN",
+              "status": "passed"
+            },
+            {
+              "name": "fails closed for unsupported server role null",
+              "status": "passed"
+            },
+            {
+              "name": "fails closed for unsupported server role ",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 400 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 401 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 403 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 429 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 500 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "API failure 503 never authenticates and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "pending disables second user click",
+              "status": "passed"
+            },
+            {
+              "name": "failed credentials can be corrected and retried",
+              "status": "passed"
+            },
+            {
+              "name": "native empty field prevents user submit",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/profile/presentation/ProfilePage.tsx": {
+      "validations": "Avatar MIME whitelist, 1 MiB limit, cancellation and persistence lifecycle",
+      "actualCaseCount": 21,
+      "unitCases": 0,
+      "integrationCases": 21,
+      "suites": [
+        {
+          "suite": "tests/profile-settings.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 21,
+          "cases": [
+            {
+              "name": "rejects MIME text/plain with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME application/pdf with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME  with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/svg+xml with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/gif with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/bmp with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/avif with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME application/octet-stream with 20 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/png with 1048577 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/jpeg with 1048577 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "rejects MIME image/webp with 1048577 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/png at 1 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/jpeg at 1 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/webp at 1 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/png at 1048576 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/jpeg at 1048576 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "persists supported image/webp at 1048576 bytes",
+              "status": "passed"
+            },
+            {
+              "name": "cancel selection rejects without reading",
+              "status": "passed"
+            },
+            {
+              "name": "invalid replacement preserves existing avatar",
+              "status": "passed"
+            },
+            {
+              "name": "valid replacement clears previous upload error",
+              "status": "passed"
+            },
+            {
+              "name": "file extension cannot bypass MIME validation",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/profile/presentation/SettingsPage.tsx": {
+      "validations": "Native account field constraints, preference choices, optional email, authorization failures and pending saves",
+      "actualCaseCount": 22,
+      "unitCases": 0,
+      "integrationCases": 22,
+      "suites": [
+        {
+          "suite": "tests/profile-settings.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 22,
+          "cases": [
+            {
+              "name": "trim all fields serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "empty email clears serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "spaces email clears serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "Unicode name serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "name maximum serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "username maximum serializes account and rotates callback token",
+              "status": "passed"
+            },
+            {
+              "name": "native invalid changeDisplayName blocks user submit",
+              "status": "passed"
+            },
+            {
+              "name": "native invalid changeUsername blocks user submit",
+              "status": "passed"
+            },
+            {
+              "name": "native invalid changeEmail blocks user submit",
+              "status": "passed"
+            },
+            {
+              "name": "account API status 401 preserves fields and routes auth failures",
+              "status": "passed"
+            },
+            {
+              "name": "account API status 403 preserves fields and routes auth failures",
+              "status": "passed"
+            },
+            {
+              "name": "account API status 409 preserves fields and routes auth failures",
+              "status": "passed"
+            },
+            {
+              "name": "account API status 500 preserves fields and routes auth failures",
+              "status": "passed"
+            },
+            {
+              "name": "saves preferences es/light",
+              "status": "passed"
+            },
+            {
+              "name": "saves preferences en/light",
+              "status": "passed"
+            },
+            {
+              "name": "saves preferences es/dark",
+              "status": "passed"
+            },
+            {
+              "name": "saves preferences en/dark",
+              "status": "passed"
+            },
+            {
+              "name": "preference failure 401 unlocks controls",
+              "status": "passed"
+            },
+            {
+              "name": "preference failure 403 unlocks controls",
+              "status": "passed"
+            },
+            {
+              "name": "preference failure 500 unlocks controls",
+              "status": "passed"
+            },
+            {
+              "name": "account pending locks both saves until response",
+              "status": "passed"
+            },
+            {
+              "name": "user typing cannot extend name beyond 100",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/survey/presentation/EmployeeSurveysPage.tsx": {
+      "validations": "Survey answers, comment replies/ownership/likes/deletion, selected votes, report fields, privacy and failures",
+      "actualCaseCount": 49,
+      "unitCases": 0,
+      "integrationCases": 49,
+      "suites": [
+        {
+          "suite": "tests/surveys.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 49,
+          "cases": [
+            {
+              "name": "answer \"\" cannot submit",
+              "status": "passed"
+            },
+            {
+              "name": "answer \" \" cannot submit",
+              "status": "passed"
+            },
+            {
+              "name": "answer \"\\t\\n\" cannot submit",
+              "status": "passed"
+            },
+            {
+              "name": "answer padded reaches trimmed API and refreshes comments",
+              "status": "passed"
+            },
+            {
+              "name": "answer Unicode reaches trimmed API and refreshes comments",
+              "status": "passed"
+            },
+            {
+              "name": "answer 1000 character boundary reaches trimmed API and refreshes comments",
+              "status": "passed"
+            },
+            {
+              "name": "already answered survey cannot be answered again",
+              "status": "passed"
+            },
+            {
+              "name": "comments disabled survey never requests comments",
+              "status": "passed"
+            },
+            {
+              "name": "answer failure 401 keeps draft and routes error",
+              "status": "passed"
+            },
+            {
+              "name": "answer failure 403 keeps draft and routes error",
+              "status": "passed"
+            },
+            {
+              "name": "answer failure 500 keeps draft and routes error",
+              "status": "passed"
+            },
+            {
+              "name": "answer pending blocks repeated clicks",
+              "status": "passed"
+            },
+            {
+              "name": "blank reply \"\" blocked",
+              "status": "passed"
+            },
+            {
+              "name": "blank reply \" \\t \" blocked",
+              "status": "passed"
+            },
+            {
+              "name": "reply sends parent ID and trims content",
+              "status": "passed"
+            },
+            {
+              "name": "reply failure 401 preserves unsent reply",
+              "status": "passed"
+            },
+            {
+              "name": "reply failure 500 preserves unsent reply",
+              "status": "passed"
+            },
+            {
+              "name": "like/unlike toggles only after successful persistence",
+              "status": "passed"
+            },
+            {
+              "name": "nonowned comment has no delete capability",
+              "status": "passed"
+            },
+            {
+              "name": "delete requires confirmation then calls correct resource",
+              "status": "passed"
+            },
+            {
+              "name": "delete cancellation makes no mutation",
+              "status": "passed"
+            },
+            {
+              "name": "delete failure 401 retains confirmation and comment",
+              "status": "passed"
+            },
+            {
+              "name": "delete failure 500 retains confirmation and comment",
+              "status": "passed"
+            },
+            {
+              "name": "vote blocked without selecting an option",
+              "status": "passed"
+            },
+            {
+              "name": "selected vote sends option ID and refreshes persisted totals",
+              "status": "passed"
+            },
+            {
+              "name": "vote failure 401 restores voting control",
+              "status": "passed"
+            },
+            {
+              "name": "vote failure 500 restores voting control",
+              "status": "passed"
+            },
+            {
+              "name": "missing report category blocks submit",
+              "status": "passed"
+            },
+            {
+              "name": "missing report title blocks submit",
+              "status": "passed"
+            },
+            {
+              "name": "missing report description blocks submit",
+              "status": "passed"
+            },
+            {
+              "name": "report priority LOW anonymous=true persists and resets form",
+              "status": "passed"
+            },
+            {
+              "name": "report priority NORMAL anonymous=true persists and resets form",
+              "status": "passed"
+            },
+            {
+              "name": "report priority HIGH anonymous=false persists and resets form",
+              "status": "passed"
+            },
+            {
+              "name": "report priority URGENT anonymous=false persists and resets form",
+              "status": "passed"
+            },
+            {
+              "name": "report failure 401 preserves form and routes errors",
+              "status": "passed"
+            },
+            {
+              "name": "report failure 403 preserves form and routes errors",
+              "status": "passed"
+            },
+            {
+              "name": "report failure 422 preserves form and routes errors",
+              "status": "passed"
+            },
+            {
+              "name": "report failure 500 preserves form and routes errors",
+              "status": "passed"
+            },
+            {
+              "name": "report maxima preserve full content",
+              "status": "passed"
+            },
+            {
+              "name": "survey status DRAFT cannot collect answers",
+              "status": "passed"
+            },
+            {
+              "name": "survey status CLOSED cannot collect answers",
+              "status": "passed"
+            },
+            {
+              "name": "closed activity cannot collect votes",
+              "status": "passed"
+            },
+            {
+              "name": "like failure 401 does not mark comment liked",
+              "status": "passed"
+            },
+            {
+              "name": "like failure 500 does not mark comment liked",
+              "status": "passed"
+            },
+            {
+              "name": "persisted vote with refresh failure 401 keeps success and routes error",
+              "status": "passed"
+            },
+            {
+              "name": "persisted vote with refresh failure 500 keeps success and routes error",
+              "status": "passed"
+            },
+            {
+              "name": "initial survey failure 401 preserves fulfilled activities",
+              "status": "passed"
+            },
+            {
+              "name": "initial survey failure 403 preserves fulfilled activities",
+              "status": "passed"
+            },
+            {
+              "name": "initial survey failure 500 preserves fulfilled activities",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/ai/presentation/EmployeeAiPage.tsx": {
+      "validations": "Nonblank content, pending send, rename guards, delete confirmation, conversation lifecycle and authorization",
+      "actualCaseCount": 28,
+      "unitCases": 0,
+      "integrationCases": 28,
+      "suites": [
+        {
+          "suite": "tests/ai.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 28,
+          "cases": [
+            {
+              "name": "blocks blank message \"\"",
+              "status": "passed"
+            },
+            {
+              "name": "blocks blank message \" \"",
+              "status": "passed"
+            },
+            {
+              "name": "blocks blank message \"\\t\\n\"",
+              "status": "passed"
+            },
+            {
+              "name": "sends trim content and language",
+              "status": "passed"
+            },
+            {
+              "name": "sends Unicode content and language",
+              "status": "passed"
+            },
+            {
+              "name": "sends 4000 boundary content and language",
+              "status": "passed"
+            },
+            {
+              "name": "pending message prevents duplicate submit and disables input",
+              "status": "passed"
+            },
+            {
+              "name": "message failure 401 routes auth or assistant notice",
+              "status": "passed"
+            },
+            {
+              "name": "message failure 403 routes auth or assistant notice",
+              "status": "passed"
+            },
+            {
+              "name": "message failure 500 routes auth or assistant notice",
+              "status": "passed"
+            },
+            {
+              "name": "rename blank \"\" is blocked",
+              "status": "passed"
+            },
+            {
+              "name": "rename blank \" \\t \" is blocked",
+              "status": "passed"
+            },
+            {
+              "name": "rename trims and updates active conversation",
+              "status": "passed"
+            },
+            {
+              "name": "rename cancel makes no mutation",
+              "status": "passed"
+            },
+            {
+              "name": "rename failure 401 keeps dialog and routes authorization",
+              "status": "passed"
+            },
+            {
+              "name": "rename failure 403 keeps dialog and routes authorization",
+              "status": "passed"
+            },
+            {
+              "name": "rename failure 500 keeps dialog and routes authorization",
+              "status": "passed"
+            },
+            {
+              "name": "delete requires confirmation; cancellation retains conversation",
+              "status": "passed"
+            },
+            {
+              "name": "confirmed deletion clears active messages and returns to history",
+              "status": "passed"
+            },
+            {
+              "name": "delete failure 401 preserves conversation",
+              "status": "passed"
+            },
+            {
+              "name": "delete failure 500 preserves conversation",
+              "status": "passed"
+            },
+            {
+              "name": "new conversation uses server ID for subsequent message",
+              "status": "passed"
+            },
+            {
+              "name": "conversation list failure 401 routes error without opening a chat",
+              "status": "passed"
+            },
+            {
+              "name": "conversation list failure 500 routes error without opening a chat",
+              "status": "passed"
+            },
+            {
+              "name": "conversation creation failure 401 leaves history intact",
+              "status": "passed"
+            },
+            {
+              "name": "conversation creation failure 500 leaves history intact",
+              "status": "passed"
+            },
+            {
+              "name": "message history failure 401 routes error",
+              "status": "passed"
+            },
+            {
+              "name": "message history failure 500 routes error",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/humanresources/presentation/HrManagementPage.tsx": {
+      "validations": "Survey native fields, type/comments contract, activity option trimming/minimum, optional description and creation failures",
+      "actualCaseCount": 37,
+      "unitCases": 0,
+      "integrationCases": 37,
+      "suites": [
+        {
+          "suite": "tests/management.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 37,
+          "cases": [
+            {
+              "name": "creates survey type DAILY comments=true",
+              "status": "passed"
+            },
+            {
+              "name": "creates survey type WEEKLY comments=true",
+              "status": "passed"
+            },
+            {
+              "name": "creates survey type DAILY comments=false",
+              "status": "passed"
+            },
+            {
+              "name": "creates survey type WEEKLY comments=false",
+              "status": "passed"
+            },
+            {
+              "name": "native required surveyTitle prevents creation",
+              "status": "passed"
+            },
+            {
+              "name": "native required surveyQuestion prevents creation",
+              "status": "passed"
+            },
+            {
+              "name": "survey title and question at maxima reach service",
+              "status": "passed"
+            },
+            {
+              "name": "survey failure 401 routes errors and preserves draft",
+              "status": "passed"
+            },
+            {
+              "name": "survey failure 403 routes errors and preserves draft",
+              "status": "passed"
+            },
+            {
+              "name": "survey failure 422 routes errors and preserves draft",
+              "status": "passed"
+            },
+            {
+              "name": "survey failure 500 routes errors and preserves draft",
+              "status": "passed"
+            },
+            {
+              "name": "rejects fewer than two nonblank options \"\"/\"\"",
+              "status": "passed"
+            },
+            {
+              "name": "rejects fewer than two nonblank options \" \"/\"Read\"",
+              "status": "passed"
+            },
+            {
+              "name": "rejects fewer than two nonblank options \"Walk\"/\"\\t\"",
+              "status": "passed"
+            },
+            {
+              "name": "rejects fewer than two nonblank options \" \"/\"\\t\"",
+              "status": "passed"
+            },
+            {
+              "name": "activity trims options and allows empty description",
+              "status": "passed"
+            },
+            {
+              "name": "added options are included after trimming",
+              "status": "passed"
+            },
+            {
+              "name": "blank added option filtered when two valid options remain",
+              "status": "passed"
+            },
+            {
+              "name": "activity failure 401 routes auth or service message",
+              "status": "passed"
+            },
+            {
+              "name": "activity failure 403 routes auth or service message",
+              "status": "passed"
+            },
+            {
+              "name": "activity failure 422 routes auth or service message",
+              "status": "passed"
+            },
+            {
+              "name": "activity failure 500 routes auth or service message",
+              "status": "passed"
+            },
+            {
+              "name": "activity pending button prevents second user create",
+              "status": "passed"
+            },
+            {
+              "name": "draft publication replaces lifecycle state",
+              "status": "passed"
+            },
+            {
+              "name": "published survey closes and loses mutation control",
+              "status": "passed"
+            },
+            {
+              "name": "closed survey cannot be republished from controls",
+              "status": "passed"
+            },
+            {
+              "name": "publication failure 401 retains draft",
+              "status": "passed"
+            },
+            {
+              "name": "publication failure 500 retains draft",
+              "status": "passed"
+            },
+            {
+              "name": "activity closure refreshes backend lifecycle state",
+              "status": "passed"
+            },
+            {
+              "name": "activity closure failure 401 retains open activity",
+              "status": "passed"
+            },
+            {
+              "name": "activity closure failure 500 retains open activity",
+              "status": "passed"
+            },
+            {
+              "name": "managed comments are cached across panel toggles",
+              "status": "passed"
+            },
+            {
+              "name": "managed comments failure 401 routes error",
+              "status": "passed"
+            },
+            {
+              "name": "managed comments failure 500 routes error",
+              "status": "passed"
+            },
+            {
+              "name": "activity percentage -5 normalizes to 0",
+              "status": "passed"
+            },
+            {
+              "name": "activity percentage 120 normalizes to 100",
+              "status": "passed"
+            },
+            {
+              "name": "activity percentage 49.6 normalizes to 50",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/auth/sessionStorage.ts": {
+      "validations": "Untrusted JSON shape, required identity/token/role/ID, invalid-state eviction and inaccessible storage",
+      "alsoExercisedBy": [
+        "tests/app.test.tsx"
+      ],
+      "actualCaseCount": 29,
+      "unitCases": 29,
+      "integrationCases": 0,
+      "suites": [
+        {
+          "suite": "tests/policies-storage.test.ts",
+          "type": "unit",
+          "actualCaseCount": 29,
+          "cases": [
+            {
+              "name": "rejects null and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects array and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects primitive and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects number and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects empty object and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects missing token and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects blank token and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects numeric token and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects missing username and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects blank username and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects numeric username and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects missing name and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects blank name and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects wrong name type and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects unknown role and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects missing role and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects string ID and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects zero ID and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects negative ID and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects fraction ID and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "rejects unsafe ID and evicts invalid storage",
+              "status": "passed"
+            },
+            {
+              "name": "roundtrips supported role EMPLOYEE",
+              "status": "passed"
+            },
+            {
+              "name": "roundtrips supported role HR_MEMBER",
+              "status": "passed"
+            },
+            {
+              "name": "roundtrips supported role SYSTEM_ADMIN",
+              "status": "passed"
+            },
+            {
+              "name": "absent session",
+              "status": "passed"
+            },
+            {
+              "name": "malformed JSON evicted",
+              "status": "passed"
+            },
+            {
+              "name": "clear preserves unrelated keys",
+              "status": "passed"
+            },
+            {
+              "name": "read error handled when removal is available",
+              "status": "passed"
+            },
+            {
+              "name": "read and eviction both blocked still fail closed",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/preferences/preferenceStore.ts": {
+      "validations": "Language/theme allowlists, per-user isolation and overwrite behavior",
+      "alsoExercisedBy": [
+        "tests/app.test.tsx",
+        "tests/profile-settings.test.tsx"
+      ],
+      "actualCaseCount": 20,
+      "unitCases": 20,
+      "integrationCases": 0,
+      "suites": [
+        {
+          "suite": "tests/policies-storage.test.ts",
+          "type": "unit",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "validates language=es theme=light",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=en theme=dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=en theme=light",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=es theme=dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=ES theme=dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=fr theme=light",
+              "status": "passed"
+            },
+            {
+              "name": "validates language= en theme=light",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=en  theme=dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language= theme=dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=null theme=light",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=es theme=DARK",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=en theme=system",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=es theme= dark",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=en theme=light ",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=es theme=",
+              "status": "passed"
+            },
+            {
+              "name": "validates language=<script> theme=<img>",
+              "status": "passed"
+            },
+            {
+              "name": "missing preferences",
+              "status": "passed"
+            },
+            {
+              "name": "isolates users",
+              "status": "passed"
+            },
+            {
+              "name": "overwrites one preference only",
+              "status": "passed"
+            },
+            {
+              "name": "invalid persisted value becomes valid after correction",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/api/apiClient.ts": {
+      "validations": "Error payload types, unauthorized classification, HTTP status/no-content/non-JSON handling and authentication headers",
+      "alsoExercisedBy": [
+        "tests/services.test.ts",
+        "tests/authentication.test.tsx",
+        "tests/surveys.test.tsx"
+      ],
+      "actualCaseCount": 22,
+      "unitCases": 22,
+      "integrationCases": 0,
+      "suites": [
+        {
+          "suite": "tests/api.test.ts",
+          "type": "unit",
+          "actualCaseCount": 22,
+          "cases": [
+            {
+              "name": "status 401 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 403 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 400 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 404 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 409 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 422 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 429 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "status 500 carries error metadata and auth classification",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload null uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload {} uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload {\"message\":2,\"code\":3} uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload {\"message\":{},\"code\":null} uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload \"bad\" uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "invalid error payload \"bad\" uses safe fallback",
+              "status": "passed"
+            },
+            {
+              "name": "non-JSON error uses fallback",
+              "status": "passed"
+            },
+            {
+              "name": "non-JSON successful response returns null",
+              "status": "passed"
+            },
+            {
+              "name": "204 requires no JSON body",
+              "status": "passed"
+            },
+            {
+              "name": "anonymous request sends no bearer or content type",
+              "status": "passed"
+            },
+            {
+              "name": "JSON request sends token and content type",
+              "status": "passed"
+            },
+            {
+              "name": "custom headers explicitly override defaults",
+              "status": "passed"
+            },
+            {
+              "name": "network failure preserved",
+              "status": "passed"
+            },
+            {
+              "name": "lookalike errors cannot trigger authorization",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/auth/authService.ts": {
+      "validations": "Identity trimming, exact password preservation, server identity mapping and typed errors",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/services.test.ts",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "login preserves password and trims identifier \" ana \"",
+              "status": "passed"
+            },
+            {
+              "name": "login preserves password and trims identifier \"ana@example.test\"",
+              "status": "passed"
+            },
+            {
+              "name": "login preserves password and trims identifier \" Ána \"",
+              "status": "passed"
+            },
+            {
+              "name": "login preserves password and trims identifier \"\\tana\\n\"",
+              "status": "passed"
+            },
+            {
+              "name": "registration normalizes identity \" Ana \"",
+              "status": "passed"
+            },
+            {
+              "name": "registration normalizes identity \"Ána 林\"",
+              "status": "passed"
+            },
+            {
+              "name": "registration normalizes identity \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+              "status": "passed"
+            },
+            {
+              "name": "registration normalizes identity \"\\tAna\\n\"",
+              "status": "passed"
+            },
+            {
+              "name": "recovery trims identifier \" ana \" without bearer",
+              "status": "passed"
+            },
+            {
+              "name": "recovery trims identifier \"ana@example.test\" without bearer",
+              "status": "passed"
+            },
+            {
+              "name": "recovery trims identifier \" Ána \" without bearer",
+              "status": "passed"
+            },
+            {
+              "name": "recovery trims identifier \"\\tana\\n\" without bearer",
+              "status": "passed"
+            },
+            {
+              "name": "login failure 401 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "login failure 429 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "register failure 409 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "register failure 422 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "recovery failure 400 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "recovery failure 503 remains typed API error",
+              "status": "passed"
+            },
+            {
+              "name": "maps supported server role HR_MEMBER without inventing permissions",
+              "status": "passed"
+            },
+            {
+              "name": "maps supported server role SYSTEM_ADMIN without inventing permissions",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/profile/profileService.ts": {
+      "validations": "Identity trimming, optional email null conversion, language/theme normalization and token rotation",
+      "actualCaseCount": 22,
+      "unitCases": 0,
+      "integrationCases": 22,
+      "suites": [
+        {
+          "suite": "tests/services.test.ts",
+          "type": "integration",
+          "actualCaseCount": 22,
+          "cases": [
+            {
+              "name": "language \"EN\" normalized to en",
+              "status": "passed"
+            },
+            {
+              "name": "language \"en\" normalized to en",
+              "status": "passed"
+            },
+            {
+              "name": "language \"En\" normalized to en",
+              "status": "passed"
+            },
+            {
+              "name": "language \"ES\" normalized to es",
+              "status": "passed"
+            },
+            {
+              "name": "language \"fr\" normalized to es",
+              "status": "passed"
+            },
+            {
+              "name": "language \"\" normalized to es",
+              "status": "passed"
+            },
+            {
+              "name": "theme DARK normalized to dark",
+              "status": "passed"
+            },
+            {
+              "name": "theme Dark normalized to dark",
+              "status": "passed"
+            },
+            {
+              "name": "theme dark normalized to dark",
+              "status": "passed"
+            },
+            {
+              "name": "theme LIGHT normalized to light",
+              "status": "passed"
+            },
+            {
+              "name": "theme system normalized to light",
+              "status": "passed"
+            },
+            {
+              "name": "account \" Ana \" sanitizes identity and optional email",
+              "status": "passed"
+            },
+            {
+              "name": "account \"Ana\" sanitizes identity and optional email",
+              "status": "passed"
+            },
+            {
+              "name": "account \"Ana\" sanitizes identity and optional email",
+              "status": "passed"
+            },
+            {
+              "name": "account \"Ána 林\" sanitizes identity and optional email",
+              "status": "passed"
+            },
+            {
+              "name": "preferences es/light use authenticated PUT",
+              "status": "passed"
+            },
+            {
+              "name": "preferences es/dark use authenticated PUT",
+              "status": "passed"
+            },
+            {
+              "name": "preferences en/light use authenticated PUT",
+              "status": "passed"
+            },
+            {
+              "name": "preferences en/dark use authenticated PUT",
+              "status": "passed"
+            },
+            {
+              "name": "error contract GET /api/v1/profile status 401",
+              "status": "passed"
+            },
+            {
+              "name": "error contract PUT /api/v1/profile/account status 409",
+              "status": "passed"
+            },
+            {
+              "name": "error contract PUT /api/v1/profile/preferences status 403",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/content/contentService.ts": {
+      "validations": "Answer/comment normalization, parent/ownership/timestamp mapping, survey comment policy, lifecycle and privacy contracts",
+      "actualCaseCount": 24,
+      "unitCases": 0,
+      "integrationCases": 24,
+      "suites": [
+        {
+          "suite": "tests/services.test.ts",
+          "type": "integration",
+          "actualCaseCount": 24,
+          "cases": [
+            {
+              "name": "answer padded answer trimmed",
+              "status": "passed"
+            },
+            {
+              "name": "answer Unicode answer trimmed",
+              "status": "passed"
+            },
+            {
+              "name": "answer 1000 character boundary trimmed",
+              "status": "passed"
+            },
+            {
+              "name": "comment parent undefined serialized",
+              "status": "passed"
+            },
+            {
+              "name": "comment parent 5 serialized",
+              "status": "passed"
+            },
+            {
+              "name": "nested comments recursively normalize ownership and timestamp",
+              "status": "passed"
+            },
+            {
+              "name": "survey comments=true mapped in create contract",
+              "status": "passed"
+            },
+            {
+              "name": "survey comments=false mapped in create contract",
+              "status": "passed"
+            },
+            {
+              "name": "survey list maps comment policy",
+              "status": "passed"
+            },
+            {
+              "name": "managed survey list maps policy",
+              "status": "passed"
+            },
+            {
+              "name": "survey lifecycle publish uses POST",
+              "status": "passed"
+            },
+            {
+              "name": "survey lifecycle close uses POST",
+              "status": "passed"
+            },
+            {
+              "name": "vote uses activity and option IDs",
+              "status": "passed"
+            },
+            {
+              "name": "delete comment uses DELETE without body",
+              "status": "passed"
+            },
+            {
+              "name": "like uses POST without body",
+              "status": "passed"
+            },
+            {
+              "name": "report anonymity=true preserved",
+              "status": "passed"
+            },
+            {
+              "name": "report anonymity=false preserved",
+              "status": "passed"
+            },
+            {
+              "name": "report status mutation sends exact lifecycle enum",
+              "status": "passed"
+            },
+            {
+              "name": "mood summary normalizes backend metrics",
+              "status": "passed"
+            },
+            {
+              "name": "activity creation preserves options order",
+              "status": "passed"
+            },
+            {
+              "name": "denied mutation POST /api/v1/surveys/1/answers propagates without masking",
+              "status": "passed"
+            },
+            {
+              "name": "denied mutation POST /api/v1/activities/2/votes propagates without masking",
+              "status": "passed"
+            },
+            {
+              "name": "denied mutation DELETE /api/v1/surveys/1/comments/5 propagates without masking",
+              "status": "passed"
+            },
+            {
+              "name": "denied mutation PATCH /api/v1/reports/6/status propagates without masking",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/infrastructure/ai/aiService.ts": {
+      "validations": "Content/title trimming, message date mapping, scoped conversation IDs and failure contracts",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/services.test.ts",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "send trimmed Spanish message",
+              "status": "passed"
+            },
+            {
+              "name": "send Unicode English message",
+              "status": "passed"
+            },
+            {
+              "name": "send 4000 character boundary",
+              "status": "passed"
+            },
+            {
+              "name": "send multiline message",
+              "status": "passed"
+            },
+            {
+              "name": "rename content \" New name \"",
+              "status": "passed"
+            },
+            {
+              "name": "rename content \"Ánimo 林\"",
+              "status": "passed"
+            },
+            {
+              "name": "rename content \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+              "status": "passed"
+            },
+            {
+              "name": "rename content \"\\tNew\\n\"",
+              "status": "passed"
+            },
+            {
+              "name": "list returns conversation identifiers",
+              "status": "passed"
+            },
+            {
+              "name": "create sends no artificial content",
+              "status": "passed"
+            },
+            {
+              "name": "delete accepts no-content response",
+              "status": "passed"
+            },
+            {
+              "name": "empty message history",
+              "status": "passed"
+            },
+            {
+              "name": "maps message timestamps and preserves senders",
+              "status": "passed"
+            },
+            {
+              "name": "list authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "create authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "rename authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "delete authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "history authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "send authorization failure propagates",
+              "status": "passed"
+            },
+            {
+              "name": "rate limited send propagates code",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/app/App.tsx": {
+      "validations": "Role-based route allowlists, restored/login sessions, forged hashes, unauthorized logout and restricted admin portal",
+      "actualCaseCount": 25,
+      "unitCases": 0,
+      "integrationCases": 25,
+      "suites": [
+        {
+          "suite": "tests/app.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 25,
+          "cases": [
+            {
+              "name": "EMPLOYEE permits route home",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE permits route surveys",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE permits route ai",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE permits route settings",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE permits route profile",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER permits route home",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER permits route management",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER permits route reports",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER permits route settings",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER permits route profile",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE rejects forged route management",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE rejects forged route reports",
+              "status": "passed"
+            },
+            {
+              "name": "EMPLOYEE rejects forged route ../management",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER rejects forged route ai",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER rejects forged route surveys",
+              "status": "passed"
+            },
+            {
+              "name": "HR_MEMBER rejects forged route unknown",
+              "status": "passed"
+            },
+            {
+              "name": "profile failure 401 logs out and removes session",
+              "status": "passed"
+            },
+            {
+              "name": "profile failure 403 logs out and removes session",
+              "status": "passed"
+            },
+            {
+              "name": "corrupt storage renders login without API requests",
+              "status": "passed"
+            },
+            {
+              "name": "system admin restored session remains restricted",
+              "status": "passed"
+            },
+            {
+              "name": "sign out clears session and returns to login",
+              "status": "passed"
+            },
+            {
+              "name": "successful login persists session and resets forged hash",
+              "status": "passed"
+            },
+            {
+              "name": "valid saved local theme applied when profile lookup is unavailable",
+              "status": "passed"
+            },
+            {
+              "name": "invalid saved preferences cannot alter theme or language",
+              "status": "passed"
+            },
+            {
+              "name": "another user's saved theme cannot affect this session",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/employee/presentation/EmployeeHomePage.tsx": {
+      "validations": "One mood per day, loading/pending/already-saved guards, retry and authentication failures",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/employee-home.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "saves mood VERY_BAD and prevents further daily submissions",
+              "status": "passed"
+            },
+            {
+              "name": "saves mood BAD and prevents further daily submissions",
+              "status": "passed"
+            },
+            {
+              "name": "saves mood GOOD and prevents further daily submissions",
+              "status": "passed"
+            },
+            {
+              "name": "saves mood VERY_GOOD and prevents further daily submissions",
+              "status": "passed"
+            },
+            {
+              "name": "persisted VERY_BAD locks all moods on reload",
+              "status": "passed"
+            },
+            {
+              "name": "persisted BAD locks all moods on reload",
+              "status": "passed"
+            },
+            {
+              "name": "persisted GOOD locks all moods on reload",
+              "status": "passed"
+            },
+            {
+              "name": "persisted VERY_GOOD locks all moods on reload",
+              "status": "passed"
+            },
+            {
+              "name": "initial mood error 400 routes authorization or unavailable notice",
+              "status": "passed"
+            },
+            {
+              "name": "initial mood error 401 routes authorization or unavailable notice",
+              "status": "passed"
+            },
+            {
+              "name": "initial mood error 403 routes authorization or unavailable notice",
+              "status": "passed"
+            },
+            {
+              "name": "initial mood error 500 routes authorization or unavailable notice",
+              "status": "passed"
+            },
+            {
+              "name": "submit failure 400 unlocks daily choices",
+              "status": "passed"
+            },
+            {
+              "name": "submit failure 401 unlocks daily choices",
+              "status": "passed"
+            },
+            {
+              "name": "submit failure 403 unlocks daily choices",
+              "status": "passed"
+            },
+            {
+              "name": "submit failure 500 unlocks daily choices",
+              "status": "passed"
+            },
+            {
+              "name": "initial request locks mood selection",
+              "status": "passed"
+            },
+            {
+              "name": "pending mood locks all choices and sends one mutation",
+              "status": "passed"
+            },
+            {
+              "name": "failed mutation can retry a different mood",
+              "status": "passed"
+            },
+            {
+              "name": "both mood read and write carry the current bearer",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/report/presentation/HrReportsPage.tsx": {
+      "validations": "Anonymous identity suppression, status lifecycle, selected record reconciliation, refresh deduplication and errors",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/hr-reports.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "status NEW persisted into row and detail",
+              "status": "passed"
+            },
+            {
+              "name": "status IN_REVIEW persisted into row and detail",
+              "status": "passed"
+            },
+            {
+              "name": "status ADDRESSED persisted into row and detail",
+              "status": "passed"
+            },
+            {
+              "name": "status CLOSED persisted into row and detail",
+              "status": "passed"
+            },
+            {
+              "name": "status failure 401 preserves existing state",
+              "status": "passed"
+            },
+            {
+              "name": "status failure 403 preserves existing state",
+              "status": "passed"
+            },
+            {
+              "name": "status failure 422 preserves existing state",
+              "status": "passed"
+            },
+            {
+              "name": "status failure 500 preserves existing state",
+              "status": "passed"
+            },
+            {
+              "name": "initial list failure 401 routes auth or safe error",
+              "status": "passed"
+            },
+            {
+              "name": "initial list failure 403 routes auth or safe error",
+              "status": "passed"
+            },
+            {
+              "name": "initial list failure 400 routes auth or safe error",
+              "status": "passed"
+            },
+            {
+              "name": "initial list failure 500 routes auth or safe error",
+              "status": "passed"
+            },
+            {
+              "name": "anonymous report hides identity in row and detail",
+              "status": "passed"
+            },
+            {
+              "name": "identified report preserves attributed author",
+              "status": "passed"
+            },
+            {
+              "name": "filter inReview matches data status",
+              "status": "passed"
+            },
+            {
+              "name": "filter addressed matches data status",
+              "status": "passed"
+            },
+            {
+              "name": "background refresh updates selected record",
+              "status": "passed"
+            },
+            {
+              "name": "background deletion closes stale selected record",
+              "status": "passed"
+            },
+            {
+              "name": "foreground pending prevents duplicate refresh",
+              "status": "passed"
+            },
+            {
+              "name": "closing detail does not mutate report",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/contexts/humanresources/presentation/HrHomePage.tsx": {
+      "validations": "Summary request deduplication, visible/background lifecycle, current token, zero/missing metric fallbacks and errors",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/hr-home.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "initial summary failure 401 uses auth or generic fallback",
+              "status": "passed"
+            },
+            {
+              "name": "initial summary failure 403 uses auth or generic fallback",
+              "status": "passed"
+            },
+            {
+              "name": "initial summary failure 400 uses auth or generic fallback",
+              "status": "passed"
+            },
+            {
+              "name": "initial summary failure 500 uses auth or generic fallback",
+              "status": "passed"
+            },
+            {
+              "name": "background summary failure 401 keeps previous metrics",
+              "status": "passed"
+            },
+            {
+              "name": "background summary failure 403 keeps previous metrics",
+              "status": "passed"
+            },
+            {
+              "name": "background summary failure 400 keeps previous metrics",
+              "status": "passed"
+            },
+            {
+              "name": "background summary failure 500 keeps previous metrics",
+              "status": "passed"
+            },
+            {
+              "name": "focus retry recovers failed initial summary",
+              "status": "passed"
+            },
+            {
+              "name": "deduplicates simultaneous focus refreshes",
+              "status": "passed"
+            },
+            {
+              "name": "pending initial request prevents background duplicate",
+              "status": "passed"
+            },
+            {
+              "name": "hidden tab interval never requests new summary",
+              "status": "passed"
+            },
+            {
+              "name": "visible interval refreshes exactly at 30 seconds",
+              "status": "passed"
+            },
+            {
+              "name": "focus refresh updates saved metrics",
+              "status": "passed"
+            },
+            {
+              "name": "visibility return requests new metrics",
+              "status": "passed"
+            },
+            {
+              "name": "unmounted summary has no refresh listeners",
+              "status": "passed"
+            },
+            {
+              "name": "new token is used after rerender",
+              "status": "passed"
+            },
+            {
+              "name": "empty distribution has finite zero positive rate",
+              "status": "passed"
+            },
+            {
+              "name": "omitted mood categories contribute zero",
+              "status": "passed"
+            },
+            {
+              "name": "pending background load preserves previous metrics",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    },
+    "src/shared/hooks/useLiveRefresh.ts": {
+      "validations": "Visibility/pending refresh guards, timing boundaries, callback freshness, error containment and listener cleanup",
+      "actualCaseCount": 20,
+      "unitCases": 0,
+      "integrationCases": 20,
+      "suites": [
+        {
+          "suite": "tests/live-refresh.test.tsx",
+          "type": "integration",
+          "actualCaseCount": 20,
+          "cases": [
+            {
+              "name": "mount does not eagerly duplicate caller's initial request",
+              "status": "passed"
+            },
+            {
+              "name": "default interval has no request before boundary",
+              "status": "passed"
+            },
+            {
+              "name": "default interval triggers at boundary",
+              "status": "passed"
+            },
+            {
+              "name": "custom interval replaces default",
+              "status": "passed"
+            },
+            {
+              "name": "interval repeats once per completed cycle",
+              "status": "passed"
+            },
+            {
+              "name": "hidden document skips interval",
+              "status": "passed"
+            },
+            {
+              "name": "hidden visibility event skips refresh",
+              "status": "passed"
+            },
+            {
+              "name": "visible return refreshes immediately",
+              "status": "passed"
+            },
+            {
+              "name": "focus requests immediate refresh",
+              "status": "passed"
+            },
+            {
+              "name": "focus remains an explicit refresh even with hidden visibility",
+              "status": "passed"
+            },
+            {
+              "name": "simultaneous focus events deduplicate pending work",
+              "status": "passed"
+            },
+            {
+              "name": "pending refresh deduplicates interval events",
+              "status": "passed"
+            },
+            {
+              "name": "pending focus also deduplicates visibility event",
+              "status": "passed"
+            },
+            {
+              "name": "successful promise unlocks subsequent focus",
+              "status": "passed"
+            },
+            {
+              "name": "rejected promise is contained and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "synchronous callback throw is contained and allows retry",
+              "status": "passed"
+            },
+            {
+              "name": "rerender uses latest callback without resetting interval",
+              "status": "passed"
+            },
+            {
+              "name": "changing interval removes old interval",
+              "status": "passed"
+            },
+            {
+              "name": "unmount removes all refresh triggers",
+              "status": "passed"
+            },
+            {
+              "name": "multiple instances maintain independent pending guards",
+              "status": "passed"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "retainedNonValidationSuites": [
+    {
+      "suite": "tests/registration-password-colors.test.mjs",
+      "source": null,
+      "type": "visual-regression",
+      "caseNames": [
+        "password status indicators contrast with light and dark surfaces"
+      ],
+      "actualCaseCount": 1
+    },
+    {
+      "suite": "tests/registration-password-visibility.test.mjs",
+      "source": null,
+      "type": "render-regression",
+      "caseNames": [
+        "shows password requirements only while a password is entered"
+      ],
+      "actualCaseCount": 1
+    }
+  ],
+  "excluded": {
+    "src/app/app.css": "Presentation styles; no executable validation. Existing contrast regression retained elsewhere.",
+    "src/index.css": "Presentation tokens and styles; color checks are visual regressions, not validation-owner cases.",
+    "src/vite-env.d.ts": "Compile-time declarations only.",
+    "src/main.tsx": "React bootstrap and provider wiring; no input/business/security validator.",
+    "src/shared/ui/SuccessMessage.tsx": "Message visibility and dismissal timing are presentation lifecycle only; no data/security/business rule.",
+    "src/shared/ui/StatusMessage.tsx": "Error/status presentation conditionals only; unused retry button does not validate data.",
+    "src/shared/ui/Spinner.tsx": "Loading indicator only.",
+    "src/shared/ui/PasswordField.tsx": "Visibility toggle and native attribute forwarding; validation belongs to consuming forms and passwordPolicy.",
+    "src/shared/ui/Logo.tsx": "Image/compact display only.",
+    "src/shared/ui/LanguageSwitcher.tsx": "Fixed language button choices and selected presentation; allowlist validation belongs to preferenceStore/profileService.",
+    "src/i18n/translations.ts": "Static translation dictionary.",
+    "src/i18n/LanguageProvider.tsx": "React context wiring and provider-presence programming guard; no runtime input policy.",
+    "src/shared/layout/AppShell.tsx": "Role-specific navigation presentation, initials and menu state. Actual route security is enforced in App and tested there.",
+    "src/domain/types.ts": "Compile-time types; these are not runtime validators.",
+    "src/infrastructure/config/legal.ts": "Static policy link, no URL validation.",
+    "src/infrastructure/config/env.ts": "Build-time URL default and trailing-slash normalization, not an active user-data/security/business validator.",
+    "src/contexts/authentication/presentation/AuthLayout.tsx": "Layout and branding only."
+  }
+}
