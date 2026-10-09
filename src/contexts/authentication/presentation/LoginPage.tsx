@@ -47,10 +47,18 @@ export function LoginPage({ onLogin, onRegister }: LoginPageProps) {
       <div className="auth-form-card">
         <h2>{t("welcomeBack")}</h2>
         <p className="form-intro">{t("safeSpaceIntro")}</p>
-        <form className="stack-form" onSubmit={submit}>
-          <label>
+        <form
+          id="web-login-form"
+          className="stack-form"
+          onSubmit={submit}
+          aria-busy={pending}
+        >
+          <label htmlFor="web-login-identifier">
             {t("usernameOrEmail")}
             <input
+              id="web-login-identifier"
+              name="identifier"
+              type="text"
               value={identifier}
               onChange={(event) => setIdentifier(event.target.value)}
               autoComplete="username"
@@ -61,6 +69,7 @@ export function LoginPage({ onLogin, onRegister }: LoginPageProps) {
           <div className="label-with-action">
             <PasswordField
               id="web-login-password"
+              name="password"
               label={t("password")}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -70,11 +79,16 @@ export function LoginPage({ onLogin, onRegister }: LoginPageProps) {
             />
           </div>
           {error && (
-            <p className="form-error" role="alert">
+            <p id="web-login-error" className="form-error" role="alert">
               {error}
             </p>
           )}
-          <button className="primary-button" type="submit" disabled={pending}>
+          <button
+            id="web-login-submit"
+            className="primary-button"
+            type="submit"
+            disabled={pending}
+          >
             {pending ? (
               <>
                 <Spinner /> {t("signingIn")}

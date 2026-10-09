@@ -6,11 +6,11 @@
   "coveragePercentagesMeasured": false,
   "totals": {
     "validationOwners": 20,
-    "vitestCases": 489,
+    "vitestCases": 492,
     "nodeCases": 5,
-    "validationCases": 492,
+    "validationCases": 495,
     "retainedNonValidationCases": 2,
-    "executedCases": 494,
+    "executedCases": 497,
     "failed": 0,
     "skipped": 0
   },
@@ -257,15 +257,27 @@
     },
     "src/contexts/authentication/presentation/LoginPage.tsx": {
       "validations": "Nonblank credentials, portal role whitelist, pending controls and login failure handling",
-      "actualCaseCount": 23,
+      "actualCaseCount": 26,
       "unitCases": 0,
-      "integrationCases": 23,
+      "integrationCases": 26,
       "suites": [
         {
           "suite": "tests/authentication.test.tsx",
           "type": "integration",
-          "actualCaseCount": 23,
+          "actualCaseCount": 26,
           "cases": [
+            {
+              "name": "stable login selectors submit identifier ana without depending on labels",
+              "status": "passed"
+            },
+            {
+              "name": "stable login selectors submit identifier ana@example.test without depending on labels",
+              "status": "passed"
+            },
+            {
+              "name": "login selectors stay stable through password visibility, loading and failure",
+              "status": "passed"
+            },
             {
               "name": "blocks empty identifier",
               "status": "passed"

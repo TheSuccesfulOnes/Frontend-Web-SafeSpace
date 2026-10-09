@@ -151,6 +151,72 @@ function loginForm() {
   return { onLogin, onRegister };
 }
 describe("src/contexts/authentication/presentation/LoginPage.tsx | integration", () => {
+  it.each(["ana", "ana@example.test"])(
+    "stable login selectors submit identifier %s without depending on labels",
+    async (identifier) => {
+      const net = network({ "POST /api/v1/auth/login": auth });
+      const onLogin = vi.fn();
+      mount(<LoginPage onLogin={onLogin} onRegister={vi.fn()} />);
+      const input = document.querySelector<HTMLInputElement>(
+        "#web-login-identifier",
+      )!;
+      const password = document.querySelector<HTMLInputElement>(
+        "#web-login-password",
+      )!;
+      const submitButton =
+        document.querySelector<HTMLButtonElement>("#web-login-submit")!;
+
+      expect(input).toBe(field("usernameOrEmail"));
+      expect(password).toBe(field("password"));
+      expect(input).toHaveAttribute("name", "identifier");
+      expect(password).toHaveAttribute("name", "password");
+      expect(input.form?.id).toBe("web-login-form");
+      expect(submitButton.form).toBe(input.form);
+      expect(document.querySelectorAll("#web-login-identifier")).toHaveLength(
+        1,
+      );
+      change(input, ` ${identifier} `);
+      change(password, " Password1! ");
+      await userEvent.setup({ delay: null }).click(submitButton);
+
+      await waitFor(() => expect(onLogin).toHaveBeenCalledOnce());
+      expect(net.mutations()[0].body).toEqual({
+        identifier,
+        password: " Password1! ",
+      });
+    },
+  );
+  it("login selectors stay stable through password visibility, loading and failure", async () => {
+    const pending = deferred<unknown>();
+    network({ "POST /api/v1/auth/login": () => pending.promise });
+    loginForm();
+    const input = document.getElementById("web-login-identifier")!;
+    const password = document.getElementById("web-login-password")!;
+    const submitButton = document.getElementById("web-login-submit")!;
+    await userEvent
+      .setup({ delay: null })
+      .click(screen.getByRole("button", { name: t.showPassword }));
+    expect(password).toHaveAttribute("type", "text");
+    submitButton.click();
+    await waitFor(() =>
+      expect(document.getElementById("web-login-form")).toHaveAttribute(
+        "aria-busy",
+        "true",
+      ),
+    );
+    expect(submitButton).toBeDisabled();
+    pending.resolve(response({ message: "Invalid credentials" }, 400));
+    const alert = await screen.findByRole("alert");
+    expect(alert.id).toBe("web-login-error");
+    expect(document.getElementById("web-login-identifier")).toBe(input);
+    expect(document.getElementById("web-login-password")).toBe(password);
+    expect(document.getElementById("web-login-submit")).toBe(submitButton);
+    expect(document.getElementById("web-login-form")).toHaveAttribute(
+      "aria-busy",
+      "false",
+    );
+    expect(submitButton).toBeEnabled();
+  });
   it.each([
     ["empty identifier", "", "Password1!"],
     ["whitespace identifier", " \t ", "Password1!"],

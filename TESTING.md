@@ -1,5 +1,23 @@
 # Frontend validation tests
 
+## Login automation selectors
+
+Use stable IDs instead of translated labels, CSS layout classes or absolute XPath:
+
+| Element | Selenium IDE target |
+| --- | --- |
+| Username or email | `id=web-login-identifier` |
+| Password | `id=web-login-password` |
+| Submit | `id=web-login-submit` |
+| Form | `id=web-login-form` |
+| Login failure | `id=web-login-error` |
+
+Both fields also expose stable `name=identifier` / `name=password`. Wait for the identifier to become visible, type the credentials, then click submit. Wait for the form to disappear on success or the error to become visible on failure. Login is a React transition: use element waits instead of waiting for a full page reload. The form exposes `aria-busy` while the request is pending and the submit button is disabled. Existing recordings must be updated to these targets; adding an ID does not change an old recorded XPath automatically.
+
+Component regression tests verify selector uniqueness, label association, exact request credentials and selector stability during password visibility changes, loading and failures.
+
+A headless Chrome Selenium smoke run against the production build passed username and email cases using these IDs. It verified password visibility, request payloads, pending state and error recovery with intercepted API responses. This browser check did not authenticate against the deployed backend.
+
 Run `npm ci`, then `npm test` from this repository with Node 24 or newer. The command runs all retained Node tests and all Vitest tests, rejects failed/skipped/unclassified cases, requires at least 20 executed cases for each validation owner, checks that every file under `src/` is inventoried, and regenerates `tests/validation-inventory.json` and the table below. Parameterized rows are separate executed cases; loops and assertions inside a case are never counted separately.
 
 On Windows, stop an existing Vite instance before a clean dependency reinstall because loaded native bindings can be locked. The local `npm ci` verification encountered EPERM on the loaded rolldown binding; `npm install` restored the dependencies successfully using the existing lockfile, with a cleanup warning for the locked temporary binding directory. No running user process was stopped. The test/build commands were rerun after recovery. Clean reinstall on this running workspace therefore remains unverified; the documented test command works with the restored locked versions.
@@ -9,13 +27,13 @@ On Windows, stop an existing Vite instance before a clean dependency reinstall b
 ## Executed inventory
 
 <!-- inventory:start -->
-20 validation owners; 489 Vitest cases + 5 retained Node cases = 494 executed, all passed. 492 validation cases and 2 retained visual/render cases. No skipped cases.
+20 validation owners; 492 Vitest cases + 5 retained Node cases = 497 executed, all passed. 495 validation cases and 2 retained visual/render cases. No skipped cases.
 
 | Source | Unit | Integration | Total | Suite(s) |
 | --- | ---: | ---: | ---: | --- |
 | src/contexts/authentication/domain/passwordPolicy.ts | 27 | 0 | 27 | tests/policies-storage.test.ts, tests/registration-password-policy.test.mjs |
 | src/contexts/authentication/presentation/RegisterPage.tsx | 0 | 23 | 23 | tests/authentication.test.tsx |
-| src/contexts/authentication/presentation/LoginPage.tsx | 0 | 23 | 23 | tests/authentication.test.tsx |
+| src/contexts/authentication/presentation/LoginPage.tsx | 0 | 26 | 26 | tests/authentication.test.tsx |
 | src/contexts/profile/presentation/ProfilePage.tsx | 0 | 21 | 21 | tests/profile-settings.test.tsx |
 | src/contexts/profile/presentation/SettingsPage.tsx | 0 | 22 | 22 | tests/profile-settings.test.tsx |
 | src/contexts/survey/presentation/EmployeeSurveysPage.tsx | 0 | 49 | 49 | tests/surveys.test.tsx |
